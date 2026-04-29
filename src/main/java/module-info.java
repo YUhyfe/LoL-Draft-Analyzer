@@ -6,6 +6,5 @@ module com.yuhyfe.loldraftanalyzer {
 
 
     opens com.yuhyfe.loldraftanalyzer to javafx.fxml;
-    opens com.yuhyfe.loldraftanalyzer.model to org.hibernate.orm.core;
     exports com.yuhyfe.loldraftanalyzer;
 }
