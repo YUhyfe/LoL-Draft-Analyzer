@@ -20,12 +20,6 @@ public class Main extends Application {
         stage.show();
 
         LcuConnector connector = new LcuConnector();
-
-        int i = 0;
-        for (String string : connector.readLockFile()) {
-            System.out.println("Id: " + i + " - " + string);
-            i++;
-        }
     }
 
     public static void main(String[] args) {
