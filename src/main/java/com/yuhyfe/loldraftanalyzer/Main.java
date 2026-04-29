@@ -18,8 +18,6 @@ public class Main extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
-
-        LcuConnector connector = new LcuConnector();
     }
 
     public static void main(String[] args) {

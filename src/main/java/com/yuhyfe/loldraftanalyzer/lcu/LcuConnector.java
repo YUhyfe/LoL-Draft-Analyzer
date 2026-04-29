@@ -15,12 +15,24 @@ import java.security.cert.X509Certificate;
 import java.util.Base64;
 
 public class LcuConnector {
+    private static LcuConnector instance;
 
     private String port;
     private String password;
 
     public LcuConnector() throws IOException {
         readLockFile();
+    }
+
+    public static LcuConnector getInstance() {
+        if (instance == null) {
+            try {
+                instance = new LcuConnector();
+            } catch (IOException e) {
+                throw new RuntimeException("Cannot read lockfile. Is League client running?", e);
+            }
+        }
+        return instance;
     }
 
     public void readLockFile() throws IOException {
