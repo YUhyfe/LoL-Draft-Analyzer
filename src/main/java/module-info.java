@@ -4,6 +4,7 @@ module com.yuhyfe.loldraftanalyzer {
     requires jakarta.persistence;
     requires org.hibernate.orm.core;
     requires java.net.http;
+    requires static lombok;
 
 
     opens com.yuhyfe.loldraftanalyzer to javafx.fxml;
