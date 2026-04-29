@@ -1,5 +1,6 @@
 package com.yuhyfe.loldraftanalyzer;
 
+import com.yuhyfe.loldraftanalyzer.lcu.LcuConnector;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import javafx.application.Application;
@@ -17,6 +18,9 @@ public class Main extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
+
+        LcuConnector connector = new LcuConnector();
+        connector.readLockFile()
     }
 
     public static void main(String[] args) {
