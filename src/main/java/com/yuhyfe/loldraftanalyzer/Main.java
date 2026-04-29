@@ -20,7 +20,7 @@ public class Main extends Application {
         stage.show();
 
         LcuConnector connector = new LcuConnector();
-        connector.readLockFile()
+        connector.readLockFile();
     }
 
     public static void main(String[] args) {
