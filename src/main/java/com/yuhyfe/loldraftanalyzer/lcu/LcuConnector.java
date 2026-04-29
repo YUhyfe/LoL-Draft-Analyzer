@@ -40,7 +40,7 @@ public class LcuConnector {
 
         String[] content = Files.readString(path).split(":");
         this.port = content[2];
-        this.password = Base64.getEncoder().encodeToString(content[3].getBytes());
+        this.password = Base64.getEncoder().encodeToString(("riot:" + content[3]).getBytes());
     }
 
     public String get(String endpoint) throws Exception {
@@ -62,6 +62,9 @@ public class LcuConnector {
                 .header("Authorization", "Basic " + password)
                 .GET()
                 .build();
+
+        String url = "https://127.0.0.1:" + port + endpoint;
+        System.out.println("URL: " + url);
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return response.body();
