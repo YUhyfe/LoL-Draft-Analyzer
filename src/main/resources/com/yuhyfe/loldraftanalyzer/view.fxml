@@ -1,10 +1,620 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.yuhyfe.loldraftanalyzer.MainController"
-            prefWidth="1280"
-            prefHeight="720">
+<BorderPane minHeight="720.0" minWidth="1280.0" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuhyfe.loldraftanalyzer.MainController">
+   <top>
+      <HBox prefHeight="70.0" prefWidth="200.0" styleClass="top-bar" BorderPane.alignment="CENTER_LEFT">
+         <children>
+            <Label styleClass="app-logo" text="⚔ DRAFT" />
+            <Label styleClass="app-logo-accent" text="ANALYZER" />
+            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" styleClass="nav-tab" text="Profil" />
+            <Button mnemonicParsing="false" styleClass="nav-tab" text="Bohaterowie" />
+            <Button mnemonicParsing="false" text="Meta">
+               <styleClass>
+                  <String fx:value="nav-tab" />
+                  <String fx:value="active" />
+               </styleClass></Button>
+            <Button mnemonicParsing="false" styleClass="nav-tab" text="Mecze" />
+            <Button mnemonicParsing="false" styleClass="nav-tab" text="Rankingi" />
+            <Region prefHeight="200.0" prefWidth="200.0" />
+            <TextField promptText="Przywoływacz lub Bohater ..." styleClass="search-field" />
+            <Button mnemonicParsing="false" styleClass="icon-btn" text="⚙" />
+            <Button mnemonicParsing="false" styleClass="icon-btn" text="?" />
+            <Button mnemonicParsing="false" styleClass="icon-btn" text="👤" />
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <StackPane prefHeight="150.0" prefWidth="200.0" styleClass="content-area" BorderPane.alignment="CENTER">
+         <children>
+            <VBox maxWidth="1600.0" prefHeight="200.0" prefWidth="100.0" spacing="24.0" StackPane.alignment="TOP_CENTER">
+               <padding>
+                  <Insets bottom="8.0" top="8.0" />
+               </padding>
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="16.0">
+                     <children>
+                        <Label styleClass="page-title" text=" Przegląd metagry" />
+                        <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="rankFilter" prefWidth="160.0" promptText="Iron +" styleClass="combo-box" />
+                        <Label text="3 069 327 rozgrywek · ostatnie 2 dni">
+                           <styleClass>
+                              <String fx:value="text-muted" />
+                              <String fx:value="text-sm" />
+                           </styleClass>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="24.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="400.0" spacing="10.0" styleClass="card" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="card-title" text="Popularne postacie" />
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="6.0">
+                                 <padding>
+                                    <Insets bottom="6.0" />
+                                 </padding>
+                                 <children>
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" selected="true" styleClass="icon-btn" text="T" />
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" styleClass="icon-btn" text="J" />
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" styleClass="icon-btn" text="M" />
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" styleClass="icon-btn" text="B" />
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" styleClass="icon-btn" text="S" />
+                                 </children>
+                              </HBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                 <padding>
+                                    <Insets top="6.0" />
+                                 </padding>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="1.">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Lee Sin" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-info" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="16.0" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="2,">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Master Yi" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-info" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="62.0" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="3.">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Rek'sai" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-info" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="108.0" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="4.">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Graves" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-info" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="154.0" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="5.">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Viego" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-info" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="400.0" spacing="10.0" styleClass="card">
+                           <children>
+                              <Label styleClass="card-title" text="Najlepsze postacie" />
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="6.0">
+                                 <padding>
+                                    <Insets bottom="6.0" />
+                                 </padding>
+                                 <children>
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" selected="true" styleClass="icon-btn" text="T" />
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" styleClass="icon-btn" text="J" />
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" styleClass="icon-btn" text="M" />
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" styleClass="icon-btn" text="B" />
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" styleClass="icon-btn" text="S" />
+                                 </children>
+                              </HBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                 <padding>
+                                    <Insets top="6.0" />
+                                 </padding>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="1.">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Lee Sin" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-success" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="16.0" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="2,">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Master Yi" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-success" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="62.0" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="3.">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Rek'sai" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-success" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="108.0" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="4.">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Graves" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-success" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="154.0" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="5.">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Viego" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-success" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="400.0" spacing="10.0" styleClass="card" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label styleClass="card-title" text="Najczęściej banowane" />
+                              <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="6.0">
+                                 <padding>
+                                    <Insets bottom="6.0" />
+                                 </padding>
+                                 <children>
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" selected="true" styleClass="icon-btn" text="T" />
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" styleClass="icon-btn" text="J" />
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" styleClass="icon-btn" text="M" />
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" styleClass="icon-btn" text="B" />
+                                    <ToggleButton mnemonicParsing="false" prefHeight="34.0" prefWidth="40.0" styleClass="icon-btn" text="S" />
+                                 </children>
+                              </HBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                                 <padding>
+                                    <Insets top="6.0" />
+                                 </padding>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="1.">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Lee Sin" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-danger" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="16.0" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="2,">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Master Yi" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-danger" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="62.0" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="3.">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Rek'sai" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-danger" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="108.0" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="4.">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Graves" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-danger" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="154.0" prefHeight="100.0" prefWidth="200.0" spacing="12.0">
+                                       <padding>
+                                          <Insets top="4.0" />
+                                       </padding>
+                                       <children>
+                                          <Label prefWidth="18.0" text="5.">
+                                             <styleClass>
+                                                <String fx:value="text-muted" />
+                                                <String fx:value="text-sm" />
+                                             </styleClass>
+                                          </Label>
+                                          <Region minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: #14253F; -fx-background-radius: 8;" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="6.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label styleClass="text-bold" text="Viego" />
+                                                <StackPane prefHeight="6.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Region maxWidth="1.7976931348623157E308" prefHeight="6.0" prefWidth="200.0" styleClass="bar-track" StackPane.alignment="CENTER_LEFT" />
+                                                      <Region prefHeight="6.0" prefWidth="108.0" styleClass="bar-fill-danger" StackPane.alignment="CENTER_LEFT" />
+                                                   </children>
+                                                </StackPane>
+                                             </children>
+                                          </VBox>
+                                          <Label alignment="CENTER_RIGHT" prefWidth="52.0" text="10.8%">
+                                             <styleClass>
+                                                <String fx:value="text-gold" />
+                                                <String fx:value="text-bold" />
+                                             </styleClass>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <VBox alignment="TOP_CENTER" maxWidth="800.0" prefHeight="200.0" prefWidth="800.0" styleClass="card" />
+               </children>
+            </VBox>
+         </children>
+      </StackPane>
+   </center>
+   <bottom>
+      <HBox prefHeight="32.0" prefWidth="200.0" style="-fx-background-color: #06121C; -fx-padding: 6 24 6 24; -fx-border-color: -hex-border-soft; -fx-border-width: 1 0 0 0;" BorderPane.alignment="CENTER_RIGHT">
+         <children>
+            <Label text="v0.1.0 · Patch 14.X · LCU: connected">
+               <styleClass>
+                  <String fx:value="text-muted" />
+                  <String fx:value="text-sm" />
+               </styleClass>
+            </Label>
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>
