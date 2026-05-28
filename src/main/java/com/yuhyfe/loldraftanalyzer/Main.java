@@ -1,8 +1,6 @@
 package com.yuhyfe.loldraftanalyzer;
 
 import com.yuhyfe.loldraftanalyzer.lcu.LcuConnector;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

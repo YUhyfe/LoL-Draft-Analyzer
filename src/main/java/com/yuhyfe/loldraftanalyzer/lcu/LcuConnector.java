@@ -36,7 +36,7 @@ public class LcuConnector {
     }
 
     public void readLockFile() throws IOException {
-        Path path = Path.of("D:/Riot Games/League of Legends/lockfile");
+        Path path = Path.of("C:/Riot Games/League of Legends/lockfile");
 
         String[] content = Files.readString(path).split(":");
         this.port = content[2];

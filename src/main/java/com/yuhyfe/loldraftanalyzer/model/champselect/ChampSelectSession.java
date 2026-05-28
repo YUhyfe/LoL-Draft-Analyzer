@@ -1,4 +1,4 @@
-package com.yuhyfe.loldraftanalyzer.model;
+package com.yuhyfe.loldraftanalyzer.model.champselect;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
