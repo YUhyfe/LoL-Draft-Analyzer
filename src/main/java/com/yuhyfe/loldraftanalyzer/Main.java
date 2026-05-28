@@ -18,12 +18,6 @@ public class Main extends Application {
         stage.setTitle("LoL Draft Analyzer");
         stage.setScene(scene);
         stage.show();
-
-        try {
-            System.out.println(LcuConnector.getInstance().get("/lol-match-history/v1/web-url"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public static void main(String[] args) {
