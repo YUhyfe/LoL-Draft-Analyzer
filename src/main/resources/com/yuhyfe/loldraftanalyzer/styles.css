@@ -358,3 +358,14 @@
     -fx-pref-height: 1;
     -fx-max-height: 1;
 }
+
+/* ============================================================
+   AVATAR
+   ============================================================ */
+.avatar-circle {
+    -fx-background-color: linear-gradient(to bottom right, #C8AA6E, #785A28);
+    -fx-background-radius: 999;
+    -fx-padding: 2;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.5), 18, 0, 0, 0);
+    -fx-alignment: center;
+}

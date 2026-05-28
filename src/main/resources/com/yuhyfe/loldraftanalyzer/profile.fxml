@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -18,7 +19,7 @@
 -->
 
 
-<BorderPane minHeight="720.0" minWidth="1280.0" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane minHeight="720.0" minWidth="1280.0" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuhyfe.loldraftanalyzer.ProfileController">
    <top>
       <HBox prefHeight="70.0" prefWidth="200.0" styleClass="top-bar" BorderPane.alignment="CENTER_LEFT">
          <children>
@@ -46,7 +47,7 @@
    <bottom>
       <HBox prefHeight="32.0" prefWidth="200.0" style="-fx-background-color: #06121C; -fx-padding: 6 24 6 24; -fx-border-color: -hex-border-soft; -fx-border-width: 1 0 0 0;" BorderPane.alignment="CENTER_RIGHT">
          <children>
-            <Label text="v0.1.0 · Patch 14.X · LCU: connected">
+            <Label fx:id="statusLabel" text="v0.1.0 · LCU: łączenie...">
                <styleClass>
                   <String fx:value="text-muted" />
                   <String fx:value="text-sm" />
@@ -65,24 +66,26 @@
                         HERO CARD
                               ========================================================= -->
                    <HBox alignment="CENTER_LEFT" spacing="28" styleClass="hero-card">
-                       <Region maxHeight="120" maxWidth="120" minHeight="120" minWidth="120" prefHeight="120" prefWidth="120" styleClass="avatar-circle" />
+                       <StackPane maxHeight="120" maxWidth="120" minHeight="120" minWidth="120" prefHeight="120" prefWidth="120" styleClass="avatar-circle">
+                           <ImageView fx:id="avatarImage" fitHeight="116" fitWidth="116" preserveRatio="true" smooth="true" />
+                       </StackPane>
                
                              <VBox alignment="CENTER_LEFT" spacing="12" HBox.hgrow="ALWAYS">
                            <HBox alignment="BASELINE_LEFT" spacing="14">
-                               <Label styleClass="summoner-name" text="Hide on Bush" />
-                               <Label styleClass="summoner-tag" text="#EUW1" />
+                               <Label fx:id="summonerName" styleClass="summoner-name" text="—" />
+                               <Label fx:id="summonerTag" styleClass="summoner-tag" text="" />
                            </HBox>
                            <HBox alignment="CENTER_LEFT" spacing="10">
-                               <Label styleClass="chip-gold" text="LVL 287" />
-                               <Label styleClass="chip" text="Diamond IV" />
-                               <Label styleClass="chip-gold" text="Mid Lane" />
-                               <Label styleClass="chip" text="EUW1" />
+                               <Label fx:id="levelChip" styleClass="chip-gold" text="LVL —" />
+                               <Label fx:id="rankChip" styleClass="chip" text="—" />
+                               <Label fx:id="mainRoleChip" styleClass="chip-gold" text="—" />
+                               <Label fx:id="platformChip" styleClass="chip" text="—" />
                            </HBox>
                        </VBox>
                
                              <VBox alignment="CENTER_RIGHT" spacing="10">
-                           <Button styleClass="btn-primary" text="↻ Odśwież profil" />
-                           <Label styleClass="text-muted text-sm" text="Ostatnia aktualizacja: 2 min temu" />
+                           <Button onAction="#handleRefresh" styleClass="btn-primary" text="↻ Odśwież profil" />
+                           <Label fx:id="lastUpdateLabel" styleClass="text-muted text-sm" text="—" />
                        </VBox>
                    </HBox>
                
@@ -93,11 +96,11 @@
                        <VBox spacing="12" styleClass="rank-card" HBox.hgrow="ALWAYS">
                            <Label styleClass="rank-queue" text="RANKED SOLO/DUO" />
                            <HBox alignment="CENTER_LEFT" spacing="18">
-                               <Region maxHeight="68" maxWidth="68" minHeight="68" minWidth="68" prefHeight="68" prefWidth="68" style="-fx-background-color: linear-gradient(to bottom right, #00C8E6, #0397AB); -fx-background-radius: 999; -fx-effect: dropshadow(gaussian, rgba(0,200,230,0.45), 16, 0, 0, 0);" />
+                               <ImageView fx:id="soloEmblem" fitHeight="68" fitWidth="68" preserveRatio="false" smooth="true" />
                                <VBox spacing="4" HBox.hgrow="ALWAYS">
-                                   <Label styleClass="rank-tier" text="Diamond IV" />
-                                   <Label styleClass="rank-lp" text="47 LP" />
-                                   <Label styleClass="text-muted text-sm" text="Wygrane 184  ·  Przegrane 161  ·  WR 53%" />
+                                   <Label fx:id="soloTier" styleClass="rank-tier" text="—" />
+                                   <Label fx:id="soloLp" styleClass="rank-lp" text="—" />
+                                   <Label fx:id="soloStats" styleClass="text-muted text-sm" text="" />
                                </VBox>
                            </HBox>
                        </VBox>
@@ -105,11 +108,11 @@
                           <VBox spacing="12" styleClass="rank-card" HBox.hgrow="ALWAYS">
                            <Label styleClass="rank-queue" text="RANKED FLEX" />
                            <HBox alignment="CENTER_LEFT" spacing="18">
-                               <Region maxHeight="68" maxWidth="68" minHeight="68" minWidth="68" prefHeight="68" prefWidth="68" style="-fx-background-color: linear-gradient(to bottom right, #A78BFA, #8338EC); -fx-background-radius: 999; -fx-effect: dropshadow(gaussian, rgba(167,139,250,0.45), 16, 0, 0, 0);" />
+                               <ImageView fx:id="flexEmblem" fitHeight="68" fitWidth="68" preserveRatio="false" smooth="true" />
                                <VBox spacing="4" HBox.hgrow="ALWAYS">
-                                   <Label styleClass="rank-tier" text="Platinum II" />
-                                   <Label styleClass="rank-lp" text="73 LP" />
-                                   <Label styleClass="text-muted text-sm" text="Wygrane 42  ·  Przegrane 39  ·  WR 52%" />
+                                   <Label fx:id="flexTier" styleClass="rank-tier" text="—" />
+                                   <Label fx:id="flexLp" styleClass="rank-lp" text="—" />
+                                   <Label fx:id="flexStats" styleClass="text-muted text-sm" text="" />
                                </VBox>
                            </HBox>
                        </VBox>
@@ -120,19 +123,19 @@
                            ========================================================= -->
                    <HBox spacing="16">
                        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                           <Label styleClass="kpi-value kpi-value-success" text="53.2%" />
-                           <Label styleClass="kpi-label" text="WIN RATE — 30 DNI" />
+                           <Label fx:id="kpiWinRate" styleClass="kpi-value kpi-value-success" text="—" />
+                           <Label styleClass="kpi-label" text="WIN RATE — SOLO Q" />
                        </VBox>
                        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                           <Label styleClass="kpi-value" text="3.84" />
+                           <Label fx:id="kpiKda" styleClass="kpi-value" text="—" />
                            <Label styleClass="kpi-label" text="ŚREDNIE KDA" />
                        </VBox>
                        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                           <Label styleClass="kpi-value kpi-value-info" text="1247" />
+                           <Label fx:id="kpiGames" styleClass="kpi-value kpi-value-info" text="—" />
                            <Label styleClass="kpi-label" text="ROZEGRANE GRY" />
                        </VBox>
                        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                           <Label styleClass="kpi-value kpi-value-warn" text="MID" />
+                           <Label fx:id="kpiRole" styleClass="kpi-value kpi-value-warn" text="—" />
                            <Label styleClass="kpi-label" text="GŁÓWNA ROLA" />
                        </VBox>
                    </HBox>
@@ -150,226 +153,18 @@
                            </HBox>
                
                                                 <ScrollPane fitToWidth="true" hbarPolicy="NEVER" minHeight="0" prefViewportHeight="0" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
-                               <VBox spacing="10">
-                                   <!-- WIN: Yasuo -->
-                                   <HBox alignment="CENTER_LEFT" spacing="16" styleClass="match-row match-row-win">
-                                       <Label styleClass="win-chip" text="WIN" />
-                                       <Region maxHeight="44" maxWidth="44" minHeight="44" minWidth="44" prefHeight="44" prefWidth="44" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8AA6E; -fx-border-width: 1; -fx-border-radius: 10;" />
-                                       <VBox spacing="3" HBox.hgrow="ALWAYS">
-                                           <Label styleClass="text-bold text-gold" text="Yasuo" />
-                                           <Label styleClass="text-muted text-sm" text="Solo Queue · 28 min temu" />
-                                       </VBox>
-                                       <VBox alignment="CENTER" spacing="2">
-                                           <Label styleClass="text-bold" text="12 / 4 / 8" />
-                                           <Label styleClass="text-muted text-sm" text="KDA 5.00" />
-                                       </VBox>
-                                       <VBox alignment="CENTER_RIGHT" prefWidth="80" spacing="2">
-                                           <Label styleClass="text-muted" text="28:14" />
-                                           <Label styleClass="text-success text-bold text-sm" text="+18 LP" />
-                                       </VBox>
-                                   </HBox>
-               
-                                                        <!-- LOSS: Ahri -->
-                                   <HBox alignment="CENTER_LEFT" spacing="16" styleClass="match-row match-row-loss">
-                                       <Label styleClass="loss-chip" text="LOSS" />
-                                       <Region maxHeight="44" maxWidth="44" minHeight="44" minWidth="44" prefHeight="44" prefWidth="44" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8232C; -fx-border-width: 1; -fx-border-radius: 10;" />
-                                       <VBox spacing="3" HBox.hgrow="ALWAYS">
-                                           <Label styleClass="text-bold text-gold" text="Ahri" />
-                                           <Label styleClass="text-muted text-sm" text="Solo Queue · 1 godz. temu" />
-                                       </VBox>
-                                       <VBox alignment="CENTER" spacing="2">
-                                           <Label styleClass="text-bold" text="6 / 9 / 4" />
-                                           <Label styleClass="text-muted text-sm" text="KDA 1.11" />
-                                       </VBox>
-                                       <VBox alignment="CENTER_RIGHT" prefWidth="80" spacing="2">
-                                           <Label styleClass="text-muted" text="32:47" />
-                                           <Label styleClass="text-danger text-bold text-sm" text="-15 LP" />
-                                       </VBox>
-                                   </HBox>
-               
-                                                        <!-- WIN: Akali -->
-                                   <HBox alignment="CENTER_LEFT" spacing="16" styleClass="match-row match-row-win">
-                                       <Label styleClass="win-chip" text="WIN" />
-                                       <Region maxHeight="44" maxWidth="44" minHeight="44" minWidth="44" prefHeight="44" prefWidth="44" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8AA6E; -fx-border-width: 1; -fx-border-radius: 10;" />
-                                       <VBox spacing="3" HBox.hgrow="ALWAYS">
-                                           <Label styleClass="text-bold text-gold" text="Akali" />
-                                           <Label styleClass="text-muted text-sm" text="Flex · 3 godz. temu" />
-                                       </VBox>
-                                       <VBox alignment="CENTER" spacing="2">
-                                           <Label styleClass="text-bold" text="14 / 3 / 6" />
-                                           <Label styleClass="text-muted text-sm" text="KDA 6.67" />
-                                       </VBox>
-                                       <VBox alignment="CENTER_RIGHT" prefWidth="80" spacing="2">
-                                           <Label styleClass="text-muted" text="24:08" />
-                                           <Label styleClass="text-success text-bold text-sm" text="+22 LP" />
-                                       </VBox>
-                                   </HBox>
-               
-                                                        <!-- WIN: Sylas -->
-                                   <HBox alignment="CENTER_LEFT" spacing="16" styleClass="match-row match-row-win">
-                                       <Label styleClass="win-chip" text="WIN" />
-                                       <Region maxHeight="44" maxWidth="44" minHeight="44" minWidth="44" prefHeight="44" prefWidth="44" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8AA6E; -fx-border-width: 1; -fx-border-radius: 10;" />
-                                       <VBox spacing="3" HBox.hgrow="ALWAYS">
-                                          <VBox spacing="3">
-                                              <Label styleClass="text-bold text-gold" text="Zed" />
-                                              <Label styleClass="text-muted text-sm" text="Solo Queue · wczoraj" />
-                                          </VBox>
-                                           <Label styleClass="text-bold text-gold" text="Sylas" />
-                                           <Label styleClass="text-muted text-sm" text="Solo Queue · 5 godz. temu" />
-                                       </VBox>
-                                       <VBox alignment="CENTER" spacing="2">
-                                           <Label styleClass="text-bold" text="9 / 5 / 11" />
-                                           <Label styleClass="text-muted text-sm" text="KDA 4.00" />
-                                       </VBox>
-                                       <VBox alignment="CENTER_RIGHT" prefWidth="80" spacing="2">
-                                           <Label styleClass="text-muted" text="31:22" />
-                                           <Label styleClass="text-success text-bold text-sm" text="+19 LP" />
-                                       </VBox>
-                                   </HBox>
-               
-                                                        <!-- LOSS: Zed -->
-                                   <HBox alignment="CENTER_LEFT" spacing="16" styleClass="match-row match-row-loss">
-                                       <Label styleClass="loss-chip" text="LOSS" />
-                                       <Region maxHeight="44" maxWidth="44" minHeight="44" minWidth="44" prefHeight="44" prefWidth="44" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8232C; -fx-border-width: 1; -fx-border-radius: 10;" />
-                                       <VBox alignment="CENTER" spacing="2">
-                                           <Label styleClass="text-bold" text="4 / 8 / 2" />
-                                           <Label styleClass="text-muted text-sm" text="KDA 0.75" />
-                                       </VBox>
-                                       <VBox alignment="CENTER_RIGHT" prefWidth="80" spacing="2">
-                                           <Label styleClass="text-muted" text="22:18" />
-                                           <Label styleClass="text-danger text-bold text-sm" text="-21 LP" />
-                                       </VBox>
-                                   </HBox>
-               
-                                                        <!-- WIN: Ekko -->
-                                   <HBox alignment="CENTER_LEFT" spacing="16" styleClass="match-row match-row-win">
-                                       <Label styleClass="win-chip" text="WIN" />
-                                       <Region maxHeight="44" maxWidth="44" minHeight="44" minWidth="44" prefHeight="44" prefWidth="44" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8AA6E; -fx-border-width: 1; -fx-border-radius: 10;" />
-                                       <VBox spacing="3" HBox.hgrow="ALWAYS">
-                                           <Label styleClass="text-bold text-gold" text="Ekko" />
-                                           <Label styleClass="text-muted text-sm" text="Solo Queue · wczoraj" />
-                                       </VBox>
-                                       <VBox alignment="CENTER" spacing="2">
-                                           <Label styleClass="text-bold" text="11 / 2 / 14" />
-                                           <Label styleClass="text-muted text-sm" text="KDA 12.50" />
-                                       </VBox>
-                                       <VBox alignment="CENTER_RIGHT" prefWidth="80" spacing="2">
-                                           <Label styleClass="text-muted" text="29:51" />
-                                           <Label styleClass="text-success text-bold text-sm" text="+24 LP" />
-                                       </VBox>
-                                   </HBox>
-               
-                                                        <!-- LOSS: Vex -->
-                                   <HBox alignment="CENTER_LEFT" spacing="16" styleClass="match-row match-row-loss">
-                                       <Label styleClass="loss-chip" text="LOSS" />
-                                       <Region maxHeight="44" maxWidth="44" minHeight="44" minWidth="44" prefHeight="44" prefWidth="44" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8232C; -fx-border-width: 1; -fx-border-radius: 10;" />
-                                       <VBox spacing="3" HBox.hgrow="ALWAYS">
-                                           <Label styleClass="text-bold text-gold" text="Vex" />
-                                           <Label styleClass="text-muted text-sm" text="Solo Queue · 2 dni temu" />
-                                       </VBox>
-                                       <VBox alignment="CENTER" spacing="2">
-                                           <Label styleClass="text-bold" text="3 / 7 / 5" />
-                                           <Label styleClass="text-muted text-sm" text="KDA 1.14" />
-                                       </VBox>
-                                       <VBox alignment="CENTER_RIGHT" prefWidth="80" spacing="2">
-                                           <Label styleClass="text-muted" text="26:42" />
-                                           <Label styleClass="text-danger text-bold text-sm" text="-17 LP" />
-                                       </VBox>
-                                   </HBox>
-               
-                                                        <!-- WIN: Yone -->
-                                   <HBox alignment="CENTER_LEFT" spacing="16" styleClass="match-row match-row-win">
-                                       <Label styleClass="win-chip" text="WIN" />
-                                       <Region maxHeight="44" maxWidth="44" minHeight="44" minWidth="44" prefHeight="44" prefWidth="44" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8AA6E; -fx-border-width: 1; -fx-border-radius: 10;" />
-                                       <VBox spacing="3" HBox.hgrow="ALWAYS">
-                                           <Label styleClass="text-bold text-gold" text="Yone" />
-                                           <Label styleClass="text-muted text-sm" text="Flex · 2 dni temu" />
-                                       </VBox>
-                                       <VBox alignment="CENTER" spacing="2">
-                                           <Label styleClass="text-bold" text="8 / 4 / 12" />
-                                           <Label styleClass="text-muted text-sm" text="KDA 5.00" />
-                                       </VBox>
-                                       <VBox alignment="CENTER_RIGHT" prefWidth="80" spacing="2">
-                                           <Label styleClass="text-muted" text="33:15" />
-                                           <Label styleClass="text-success text-bold text-sm" text="+16 LP" />
-                                       </VBox>
-                                   </HBox>
+                               <VBox fx:id="matchListContainer" spacing="10">
+                                   <!-- wypełniane przez ProfileController -->
                                </VBox>
                            </ScrollPane>
                        </VBox>
                
                                             <!-- RIGHT: top postacie -->
                        <VBox maxWidth="480" prefWidth="480" spacing="14" styleClass="card">
-                           <Label styleClass="section-title" text="Top postacie (30 dni)" />
-               
-                                                <!-- Yasuo 64% -->
-                           <HBox alignment="CENTER_LEFT" spacing="14">
-                               <Region maxHeight="48" maxWidth="48" minHeight="48" minWidth="48" prefHeight="48" prefWidth="48" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8AA6E; -fx-border-width: 1; -fx-border-radius: 10;" />
-                               <VBox HBox.hgrow="ALWAYS">
-                                   <Label styleClass="text-bold text-lg" text="Yasuo" />
-                                   <Label styleClass="text-muted text-sm" text="42 gier  ·  KDA 3.21" />
-                               </VBox>
-                               <VBox alignment="CENTER_RIGHT">
-                                   <Label styleClass="text-success text-bold text-lg" text="64%" />
-                                   <Label styleClass="kpi-label" text="WIN RATE" />
-                               </VBox>
-                           </HBox>
-                           <Region styleClass="divider" />
-               
-                                                <!-- Ahri 58% -->
-                           <HBox alignment="CENTER_LEFT" spacing="14">
-                               <Region maxHeight="48" maxWidth="48" minHeight="48" minWidth="48" prefHeight="48" prefWidth="48" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8AA6E; -fx-border-width: 1; -fx-border-radius: 10;" />
-                               <VBox HBox.hgrow="ALWAYS">
-                                   <Label styleClass="text-bold text-lg" text="Ahri" />
-                                   <Label styleClass="text-muted text-sm" text="34 gier  ·  KDA 2.84" />
-                               </VBox>
-                               <VBox alignment="CENTER_RIGHT">
-                                   <Label styleClass="text-success text-bold text-lg" text="58%" />
-                                   <Label styleClass="kpi-label" text="WIN RATE" />
-                               </VBox>
-                           </HBox>
-                           <Region styleClass="divider" />
-               
-                                                <!-- Akali 55% -->
-                           <HBox alignment="CENTER_LEFT" spacing="14">
-                               <Region maxHeight="48" maxWidth="48" minHeight="48" minWidth="48" prefHeight="48" prefWidth="48" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8AA6E; -fx-border-width: 1; -fx-border-radius: 10;" />
-                               <VBox HBox.hgrow="ALWAYS">
-                                   <Label styleClass="text-bold text-lg" text="Akali" />
-                                   <Label styleClass="text-muted text-sm" text="29 gier  ·  KDA 3.05" />
-                               </VBox>
-                               <VBox alignment="CENTER_RIGHT">
-                                   <Label styleClass="text-success text-bold text-lg" text="55%" />
-                                   <Label styleClass="kpi-label" text="WIN RATE" />
-                               </VBox>
-                           </HBox>
-                           <Region styleClass="divider" />
-               
-                                                <!-- Sylas 51% -->
-                           <HBox alignment="CENTER_LEFT" spacing="14">
-                               <Region maxHeight="48" maxWidth="48" minHeight="48" minWidth="48" prefHeight="48" prefWidth="48" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8AA6E; -fx-border-width: 1; -fx-border-radius: 10;" />
-                               <VBox HBox.hgrow="ALWAYS">
-                                   <Label styleClass="text-bold text-lg" text="Sylas" />
-                                   <Label styleClass="text-muted text-sm" text="22 gier  ·  KDA 2.41" />
-                               </VBox>
-                               <VBox alignment="CENTER_RIGHT">
-                                   <Label styleClass="text-gold text-bold text-lg" text="51%" />
-                                   <Label styleClass="kpi-label" text="WIN RATE" />
-                               </VBox>
-                           </HBox>
-                           <Region styleClass="divider" />
-               
-                                                <!-- Vex 38% (zła passa) -->
-                           <HBox alignment="CENTER_LEFT" spacing="14">
-                               <Region maxHeight="48" maxWidth="48" minHeight="48" minWidth="48" prefHeight="48" prefWidth="48" style="-fx-background-color: #14253F; -fx-background-radius: 10; -fx-border-color: #C8232C; -fx-border-width: 1; -fx-border-radius: 10;" />
-                               <VBox HBox.hgrow="ALWAYS">
-                                   <Label styleClass="text-bold text-gold text-lg" text="Vex" />
-                                   <Label styleClass="text-muted text-sm" text="13 gier  ·  KDA 1.62" />
-                               </VBox>
-                               <VBox alignment="CENTER_RIGHT">
-                                   <Label styleClass="text-danger text-bold text-lg" text="38%" />
-                                   <Label styleClass="kpi-label" text="WIN RATE" />
-                               </VBox>
-                           </HBox>
+                           <Label styleClass="section-title" text="Top postacie" />
+                           <VBox fx:id="topChampionsContainer" spacing="0">
+                               <!-- wypełniane przez ProfileController -->
+                           </VBox>
                        </VBox>
                    </HBox>
                </children>
