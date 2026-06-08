@@ -1,0 +1,6 @@
+module:com.yuhyfe.loldraftanalyzer
+com.yuhyfe.loldraftanalyzer
+com.yuhyfe.loldraftanalyzer.controller
+com.yuhyfe.loldraftanalyzer.model.match
+com.yuhyfe.loldraftanalyzer.model.ranked
+com.yuhyfe.loldraftanalyzer.util
