@@ -14,4 +14,5 @@ public class Game {
     private int queueId;
     private List<ParticipantIdentity> participantIdentities;
     private List<Participant> participants;
+    private List<TeamStats> teams;
 }
