@@ -358,3 +358,408 @@
     -fx-pref-height: 1;
     -fx-max-height: 1;
 }
+
+/* ============================================================
+   PROFILE
+   ============================================================ */
+.hero-card {
+    -fx-background-color: linear-gradient(to right, #142944 0%, #0A1428 65%);
+    -fx-background-radius: 20;
+    -fx-border-color: -hex-gold;
+    -fx-border-radius: 20;
+    -fx-border-width: 1;
+    -fx-padding: 28 36 28 36;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.18), 28, 0, 0, 8);
+}
+
+.avatar-circle {
+    -fx-background-color: linear-gradient(to bottom right, #C8AA6E, #0397AB);
+    -fx-background-radius: 999;
+    -fx-border-color: -hex-gold-bright;
+    -fx-border-width: 3;
+    -fx-border-radius: 999;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.45), 20, 0, 0, 0);
+}
+
+.summoner-name {
+    -fx-text-fill: -hex-gold-bright;
+    -fx-font-size: 38px;
+    -fx-font-weight: bold;
+}
+
+.summoner-tag {
+    -fx-text-fill: -hex-gold;
+    -fx-font-size: 18px;
+}
+
+.kpi-card {
+    -fx-background-color: linear-gradient(to bottom, #0F1E33, #0A1428);
+    -fx-background-radius: 16;
+    -fx-border-color: -hex-border;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+    -fx-padding: 18 22 18 22;
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 4;
+}
+
+.kpi-value {
+    -fx-text-fill: -hex-gold-bright;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+.kpi-value-success { -fx-text-fill: -hex-success; }
+.kpi-value-info    { -fx-text-fill: -hex-turquoise-br; }
+.kpi-value-warn    { -fx-text-fill: -hex-warning; }
+
+.kpi-label {
+    -fx-text-fill: -hex-text-muted;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.rank-card {
+    -fx-background-color: linear-gradient(to bottom right, #1A2A47, #0A1428);
+    -fx-background-radius: 18;
+    -fx-border-color: -hex-gold;
+    -fx-border-radius: 18;
+    -fx-border-width: 1;
+    -fx-padding: 22 24 22 24;
+}
+
+.rank-tier {
+    -fx-text-fill: -hex-gold-bright;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.rank-lp {
+    -fx-text-fill: -hex-turquoise-br;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.rank-queue {
+    -fx-text-fill: -hex-text-muted;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.match-row {
+    -fx-background-color: #0F1E33;
+    -fx-background-radius: 12;
+    -fx-padding: 12 18 12 18;
+    -fx-border-color: -hex-border-soft;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+.match-row:hover {
+    -fx-background-color: #14253F;
+    -fx-border-color: -hex-gold;
+}
+.match-row-win {
+    -fx-border-color: -hex-success;
+    -fx-effect: innershadow(gaussian, rgba(0,245,212,0.10), 12, 0, 4, 0);
+}
+.match-row-loss {
+    -fx-border-color: -hex-danger;
+    -fx-effect: innershadow(gaussian, rgba(200,35,44,0.10), 12, 0, 4, 0);
+}
+
+.win-chip {
+    -fx-background-color: rgba(0, 245, 212, 0.18);
+    -fx-background-radius: 999;
+    -fx-border-color: -hex-success;
+    -fx-border-radius: 999;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-success;
+    -fx-padding: 4 12 4 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.loss-chip {
+    -fx-background-color: rgba(200, 35, 44, 0.20);
+    -fx-background-radius: 999;
+    -fx-border-color: -hex-danger;
+    -fx-border-radius: 999;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-danger;
+    -fx-padding: 4 12 4 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.section-title {
+    -fx-text-fill: -hex-gold;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* ============================================================
+   CHAMPIONS GRID
+   ============================================================ */
+.champ-card {
+    -fx-background-color: linear-gradient(to bottom, #0F1E33, #0A1428);
+    -fx-background-radius: 14;
+    -fx-border-color: -hex-border;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 12, 0, 0, 4);
+}
+.champ-card:hover {
+    -fx-border-color: -hex-gold;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.40), 18, 0, 0, 6);
+}
+
+.champ-portrait {
+    -fx-background-color: linear-gradient(to bottom right, #1A2E47, #0A1428);
+    -fx-background-radius: 14 14 0 0;
+    -fx-border-color: -hex-border-soft;
+    -fx-border-width: 0 0 1 0;
+}
+
+.champ-portrait-bg-mid    { -fx-background-color: linear-gradient(to bottom right, #2D1B4E, #0A1428); }
+.champ-portrait-bg-top    { -fx-background-color: linear-gradient(to bottom right, #4A1E1E, #0A1428); }
+.champ-portrait-bg-jungle { -fx-background-color: linear-gradient(to bottom right, #1E4A2E, #0A1428); }
+.champ-portrait-bg-adc    { -fx-background-color: linear-gradient(to bottom right, #4E3B1A, #0A1428); }
+.champ-portrait-bg-sup    { -fx-background-color: linear-gradient(to bottom right, #1A3E4E, #0A1428); }
+
+.champ-info {
+    -fx-padding: 10 12 12 12;
+}
+
+.champ-name {
+    -fx-text-fill: -hex-gold-bright;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.champ-letter {
+    -fx-text-fill: rgba(200,170,110,0.65);
+    -fx-font-size: 56px;
+    -fx-font-weight: bold;
+}
+
+.tier-badge {
+    -fx-background-radius: 8;
+    -fx-padding: 3 8 3 8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.tier-sp { -fx-background-color: linear-gradient(to bottom right, #FF006E, #C2185B); -fx-text-fill: white; -fx-effect: dropshadow(gaussian, rgba(255,0,110,0.5), 8, 0, 0, 0); }
+.tier-s  { -fx-background-color: linear-gradient(to bottom right, #F0E6D2, #C8AA6E); -fx-text-fill: #0A1428; }
+.tier-a  { -fx-background-color: linear-gradient(to bottom right, #00C8E6, #0397AB); -fx-text-fill: #0A1428; }
+.tier-b  { -fx-background-color: linear-gradient(to bottom right, #4ADE80, #16A34A); -fx-text-fill: #0A1428; }
+.tier-c  { -fx-background-color: #5B5A4F; -fx-text-fill: white; }
+.tier-d  { -fx-background-color: linear-gradient(to bottom right, #E94560, #C8232C); -fx-text-fill: white; }
+
+.role-chip-mini {
+    -fx-background-color: rgba(10,20,40,0.85);
+    -fx-background-radius: 6;
+    -fx-border-color: rgba(200,170,110,0.4);
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-gold;
+    -fx-padding: 2 7 2 7;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.filter-chip {
+    -fx-background-color: transparent;
+    -fx-background-radius: 999;
+    -fx-border-color: -hex-border;
+    -fx-border-radius: 999;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-text-muted;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+.filter-chip:hover {
+    -fx-border-color: -hex-gold;
+    -fx-text-fill: -hex-gold;
+}
+.filter-chip.active {
+    -fx-background-color: linear-gradient(to bottom, #C8AA6E, #8E6B2C);
+    -fx-border-color: -hex-gold;
+    -fx-text-fill: #0A1428;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.40), 10, 0, 0, 0);
+}
+
+/* ============================================================
+   MATCH HISTORY (Mecze) — szczegółowe wiersze meczów
+   ============================================================ */
+.match-detail-row {
+    -fx-background-color: linear-gradient(to right, #0F1E33, #0A1428);
+    -fx-background-radius: 14;
+    -fx-padding: 16 22 16 22;
+    -fx-border-color: -hex-border-soft;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+.match-detail-row:hover {
+    -fx-border-color: -hex-gold;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.20), 14, 0, 0, 4);
+}
+.match-detail-row-win {
+    -fx-border-color: rgba(0,245,212,0.40);
+    -fx-background-color: linear-gradient(to right, #0A2A2A 0%, #0A1428 50%);
+}
+.match-detail-row-win:hover {
+    -fx-border-color: -hex-success;
+}
+.match-detail-row-loss {
+    -fx-border-color: rgba(200,35,44,0.40);
+    -fx-background-color: linear-gradient(to right, #2A0F12 0%, #0A1428 50%);
+}
+.match-detail-row-loss:hover {
+    -fx-border-color: -hex-danger;
+}
+
+.item-slot {
+    -fx-background-color: #050B14;
+    -fx-background-radius: 6;
+    -fx-border-color: -hex-border-soft;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-min-width: 32;
+    -fx-min-height: 32;
+    -fx-max-width: 32;
+    -fx-max-height: 32;
+}
+.item-slot-filled {
+    -fx-background-color: linear-gradient(to bottom right, #1A2E47, #0A1428);
+    -fx-border-color: rgba(200,170,110,0.4);
+}
+.item-slot-trinket {
+    -fx-background-color: linear-gradient(to bottom right, #2A1E47, #0A1428);
+    -fx-border-color: rgba(167,139,250,0.6);
+}
+
+.queue-chip {
+    -fx-background-color: rgba(200,170,110,0.08);
+    -fx-background-radius: 6;
+    -fx-border-color: rgba(200,170,110,0.30);
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-text-muted;
+    -fx-padding: 3 9 3 9;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.team-mini-portrait {
+    -fx-background-color: #14253F;
+    -fx-background-radius: 4;
+    -fx-border-color: -hex-border-soft;
+    -fx-border-radius: 4;
+    -fx-border-width: 1;
+    -fx-min-width: 22;
+    -fx-min-height: 22;
+    -fx-max-width: 22;
+    -fx-max-height: 22;
+}
+.team-mini-portrait-self {
+    -fx-border-color: -hex-gold;
+    -fx-border-width: 2;
+}
+
+/* ============================================================
+   LEADERBOARDS (Rankingi)
+   ============================================================ */
+.rank-row {
+    -fx-background-color: linear-gradient(to right, #0F1E33, #0A1428 70%);
+    -fx-background-radius: 12;
+    -fx-padding: 14 22 14 22;
+    -fx-border-color: -hex-border-soft;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+.rank-row:hover {
+    -fx-background-color: linear-gradient(to right, #14253F, #0A1428 70%);
+    -fx-border-color: -hex-gold;
+}
+
+.rank-position {
+    -fx-background-color: rgba(200,170,110,0.12);
+    -fx-background-radius: 999;
+    -fx-text-fill: -hex-gold;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-alignment: CENTER;
+    -fx-min-width: 48;
+    -fx-min-height: 36;
+    -fx-pref-width: 48;
+    -fx-pref-height: 36;
+}
+.rank-position-gold {
+    -fx-background-color: linear-gradient(to bottom right, #FFD700, #C8AA6E);
+    -fx-text-fill: #0A1428;
+    -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.50), 12, 0, 0, 0);
+}
+.rank-position-silver {
+    -fx-background-color: linear-gradient(to bottom right, #E8E8E8, #9CA3AF);
+    -fx-text-fill: #0A1428;
+    -fx-effect: dropshadow(gaussian, rgba(232,232,232,0.35), 10, 0, 0, 0);
+}
+.rank-position-bronze {
+    -fx-background-color: linear-gradient(to bottom right, #CD7F32, #8B5A2B);
+    -fx-text-fill: #0A1428;
+    -fx-effect: dropshadow(gaussian, rgba(205,127,50,0.35), 10, 0, 0, 0);
+}
+
+.podium-card {
+    -fx-background-color: linear-gradient(to bottom, #14253F, #0A1428);
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-width: 2;
+    -fx-padding: 24 20 24 20;
+    -fx-alignment: CENTER;
+    -fx-spacing: 10;
+}
+.podium-1 {
+    -fx-border-color: #FFD700;
+    -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.45), 28, 0, 0, 10);
+}
+.podium-2 {
+    -fx-border-color: #E8E8E8;
+    -fx-effect: dropshadow(gaussian, rgba(232,232,232,0.30), 22, 0, 0, 8);
+}
+.podium-3 {
+    -fx-border-color: #CD7F32;
+    -fx-effect: dropshadow(gaussian, rgba(205,127,50,0.30), 22, 0, 0, 8);
+}
+
+.podium-avatar {
+    -fx-background-radius: 999;
+    -fx-border-width: 3;
+    -fx-border-radius: 999;
+    -fx-min-width: 96;
+    -fx-min-height: 96;
+    -fx-max-width: 96;
+    -fx-max-height: 96;
+}
+
+.trend-up {
+    -fx-text-fill: -hex-success;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+.trend-down {
+    -fx-text-fill: -hex-danger;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+.trend-flat {
+    -fx-text-fill: -hex-text-muted;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
