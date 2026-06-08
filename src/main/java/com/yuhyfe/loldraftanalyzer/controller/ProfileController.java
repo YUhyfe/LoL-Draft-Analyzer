@@ -1,4 +1,4 @@
-package com.yuhyfe.loldraftanalyzer;
+package com.yuhyfe.loldraftanalyzer.controller;
 
 import com.yuhyfe.loldraftanalyzer.model.summoner.*;
 import com.yuhyfe.loldraftanalyzer.model.ranked.*;
@@ -26,9 +26,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.yuhyfe.loldraftanalyzer.util.AppLogger;
+import java.util.logging.Logger;
+
 public class ProfileController {
 
-    // Hero card
     @FXML private Label summonerName;
     @FXML private Label summonerTag;
     @FXML private Label levelChip;
@@ -38,7 +40,6 @@ public class ProfileController {
     @FXML private Label lastUpdateLabel;
     @FXML private ImageView avatarImage;
 
-    // Rank cards
     @FXML private Label soloTier;
     @FXML private Label soloLp;
     @FXML private Label soloStats;
@@ -48,19 +49,15 @@ public class ProfileController {
     @FXML private Label flexStats;
     @FXML private ImageView flexEmblem;
 
-    // KPI row
     @FXML private Label kpiWinRate;
     @FXML private Label kpiKda;
     @FXML private Label kpiGames;
     @FXML private Label kpiRole;
 
-    // Match list
     @FXML private VBox matchListContainer;
 
-    // Top champions
     @FXML private VBox topChampionsContainer;
 
-    // Status bar
     @FXML private Label statusLabel;
 
     private final DataDragonService    dataDragonService    = new DataDragonService();
@@ -85,8 +82,6 @@ public class ProfileController {
         loadRanked();
     }
 
-    // ------------------------------------------------------------------ summoner
-
     private void loadSummoner() {
         statusLabel.setText("v0.1.0 · LCU: łączenie...");
 
@@ -108,7 +103,7 @@ public class ProfileController {
             statusLabel.setText("v0.1.0 · LCU: połączono");
             updateLastUpdateLabel();
             loadImage(avatarImage, () -> dataDragonService.getProfileIconStream(s.getProfileIconId()));
-            loadMatches(s.getPuuid());
+            loadMatches(s.getPuuid(), s.getGameName());
         });
 
         task.setOnFailed(e -> {
@@ -120,8 +115,6 @@ public class ProfileController {
 
         daemon(task);
     }
-
-    // ------------------------------------------------------------------ ranked
 
     private void loadRanked() {
         Task<RankedStats> task = new Task<>() {
@@ -182,15 +175,13 @@ public class ProfileController {
         return hasDivision ? tier + " " + entry.getDivision() : tier;
     }
 
-    // ------------------------------------------------------------------ matches
-
-    private void loadMatches(String puuid) {
+    private void loadMatches(String puuid, String gameName) {
         matchListContainer.getChildren().clear();
 
         Task<List<MatchSummary>> task = new Task<>() {
             @Override
             protected List<MatchSummary> call() throws Exception {
-                return matchHistoryService.getRecentMatches(puuid, 10);
+                return matchHistoryService.getRecentMatches(puuid, gameName, 10);
             }
         };
 
@@ -215,7 +206,6 @@ public class ProfileController {
     private void applyMatchKpi(List<MatchSummary> matches) {
         if (matches.isEmpty()) return;
 
-        // Average KDA
         double totalKills   = matches.stream().mapToInt(MatchSummary::getKills).sum();
         double totalDeaths  = matches.stream().mapToInt(MatchSummary::getDeaths).sum();
         double totalAssists = matches.stream().mapToInt(MatchSummary::getAssists).sum();
@@ -223,7 +213,6 @@ public class ProfileController {
                                       : (totalKills + totalAssists) / totalDeaths;
         kpiKda.setText(String.format("%.2f", kda));
 
-        // Most frequent lane
         matches.stream()
             .filter(m -> m.getLane() != null && !m.getLane().isBlank())
             .collect(Collectors.groupingBy(MatchSummary::getLane, Collectors.counting()))
@@ -239,7 +228,6 @@ public class ProfileController {
     }
 
     private void buildTopChampions(List<MatchSummary> matches) {
-        // Group by champion, sort by game count descending, take top 5
         Map<String, List<MatchSummary>> byChamp = matches.stream()
             .filter(m -> !"Unknown".equals(m.getChampionName()))
             .collect(Collectors.groupingBy(MatchSummary::getChampionName));
@@ -266,7 +254,6 @@ public class ProfileController {
         HBox row = new HBox(14);
         row.setAlignment(Pos.CENTER_LEFT);
 
-        // Champion icon
         ImageView icon = new ImageView();
         icon.setFitWidth(48);
         icon.setFitHeight(48);
@@ -278,7 +265,6 @@ public class ProfileController {
         icon.setClip(clip);
         loadImage(icon, () -> dataDragonService.getChampionImageStream(champName));
 
-        // Name + stats
         int wins   = (int) games.stream().filter(MatchSummary::isWin).count();
         int total  = games.size();
         int losses = total - wins;
@@ -295,7 +281,6 @@ public class ProfileController {
         statsLabel.getStyleClass().addAll("text-muted", "text-sm");
         info.getChildren().addAll(nameLabel, statsLabel);
 
-        // Win rate
         int wr = total == 0 ? 0 : (int) Math.round(wins * 100.0 / total);
         VBox wrBox = new VBox();
         wrBox.setAlignment(Pos.CENTER_RIGHT);
@@ -315,11 +300,9 @@ public class ProfileController {
         row.setAlignment(Pos.CENTER_LEFT);
         row.getStyleClass().addAll("match-row", match.isWin() ? "match-row-win" : "match-row-loss");
 
-        // WIN / LOSS chip
         Label chip = new Label(match.isWin() ? "WIN" : "LOSS");
         chip.getStyleClass().add(match.isWin() ? "win-chip" : "loss-chip");
 
-        // Champion icon (44×44, rounded corners)
         ImageView champIcon = new ImageView();
         champIcon.setFitWidth(44);
         champIcon.setFitHeight(44);
@@ -333,7 +316,6 @@ public class ProfileController {
             loadImage(champIcon, () -> dataDragonService.getChampionImageStream(match.getChampionName()));
         }
 
-        // Champion name + queue · time
         VBox champInfo = new VBox(3);
         HBox.setHgrow(champInfo, Priority.ALWAYS);
         Label champLabel = new Label(match.getChampionName());
@@ -342,7 +324,6 @@ public class ProfileController {
         queueTime.getStyleClass().addAll("text-muted", "text-sm");
         champInfo.getChildren().addAll(champLabel, queueTime);
 
-        // K/D/A
         VBox kdaBox = new VBox(2);
         kdaBox.setAlignment(Pos.CENTER);
         Label kdaLabel = new Label(match.getKdaString());
@@ -351,7 +332,6 @@ public class ProfileController {
         kdaRatio.getStyleClass().addAll("text-muted", "text-sm");
         kdaBox.getChildren().addAll(kdaLabel, kdaRatio);
 
-        // Duration + lane
         VBox durationBox = new VBox(2);
         durationBox.setAlignment(Pos.CENTER_RIGHT);
         durationBox.setPrefWidth(80);
@@ -370,22 +350,18 @@ public class ProfileController {
         lastUpdateLabel.setText("Ostatnia aktualizacja: " + time);
     }
 
-    // ------------------------------------------------------------------ helpers
-
     @FunctionalInterface
     private interface ImageFetcher {
         InputStream fetch() throws Exception;
     }
 
     private void loadImage(ImageView target, ImageFetcher fetcher) {
-        // Capture dimensions on FX thread before spawning background task
         double w = target.getFitWidth();
         double h = target.getFitHeight();
         Task<Image> task = new Task<>() {
             @Override
             protected Image call() throws Exception {
                 InputStream is = fetcher.fetch();
-                // Resize at decode time — more reliable than relying on ImageView scaling
                 return (w > 0 && h > 0) ? new Image(is, w, h, false, true) : new Image(is);
             }
         };
@@ -393,16 +369,12 @@ public class ProfileController {
         daemon(task);
     }
 
-    // Rank emblem PNGs place a small crest in the center of a large transparent
-    // canvas, with canvas/crest sizes varying per tier. Load at natural size,
-    // detect the non-transparent bounding box, and use it as the viewport so the
-    // crest fills the frame uniformly regardless of tier.
     private void loadEmblem(ImageView target, ImageFetcher fetcher) {
         Task<Image> task = new Task<>() {
             @Override
             protected Image call() throws Exception {
                 InputStream is = fetcher.fetch();
-                return new Image(is); // natural size — viewport coords must be in source space
+                return new Image(is);
             }
         };
         task.setOnSucceeded(e -> {
@@ -419,7 +391,7 @@ public class ProfileController {
         if (reader == null) return null;
         int w = (int) img.getWidth();
         int h = (int) img.getHeight();
-        int step = Math.max(1, Math.min(w, h) / 256); // sample for speed on big canvases
+        int step = Math.max(1, Math.min(w, h) / 256);
         int alphaThreshold = 20;
         int minX = w, minY = h, maxX = -1, maxY = -1;
         for (int y = 0; y < h; y += step) {
@@ -433,9 +405,8 @@ public class ProfileController {
                 }
             }
         }
-        if (maxX < 0) return null; // fully transparent
+        if (maxX < 0) return null;
 
-        // Pad slightly so the crest isn't clipped at the edges.
         int padX = (int) ((maxX - minX) * 0.06);
         int padY = (int) ((maxY - minY) * 0.06);
         minX = Math.max(0, minX - padX);
@@ -443,7 +414,6 @@ public class ProfileController {
         maxX = Math.min(w - 1, maxX + padX);
         maxY = Math.min(h - 1, maxY + padY);
 
-        // Make the viewport square and centered so a preserveRatio fit doesn't distort.
         double boxW = maxX - minX + 1;
         double boxH = maxY - minY + 1;
         double side = Math.max(boxW, boxH);

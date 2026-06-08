@@ -1,46 +1,42 @@
-package com.yuhyfe.loldraftanalyzer;
+package com.yuhyfe.loldraftanalyzer.controller;
 
+import com.yuhyfe.loldraftanalyzer.util.AppLogger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Logger;
 
-/**
- * Kontroler shellu — odpowiada za routing między widokami.
- * Każdy widok (meta / profile / champions / mecze / rankingi) jest osobnym FXML,
- * który ten kontroler ładuje do StackPane content-area po kliknięciu w tab.
- */
 public class MainController {
 
-    // ---- Widoki załadowane na starcie (cache) ----
+    private static final Logger LOG = AppLogger.get(MainController.class);
+
     private Parent profilePage;
     private Parent championsPage;
     private Parent metaPage;
     private Parent meczePage;
     private Parent rankingiPage;
 
-    // ---- Aktualnie aktywny tab ----
     private Button activeTab;
 
-    // ---- @FXML injections z view.fxml ----
     @FXML private StackPane contentArea;
     @FXML private Button navProfil;
     @FXML private Button navBohaterowie;
     @FXML private Button navMeta;
     @FXML private Button navMecze;
     @FXML private Button navRankingi;
+    @FXML private Button btnSettings;
 
-    /**
-     * Wywoływane automatycznie przez FXMLLoader po wstrzyknięciu pól @FXML.
-     */
     @FXML
     public void initialize() {
-        // Ładujemy wszystkie strony raz na starcie — szybsze przełączanie później.
         try {
             profilePage   = loadPage("profile.fxml");
             championsPage = loadPage("champions.fxml");
@@ -48,27 +44,42 @@ public class MainController {
             meczePage     = loadPage("mecze.fxml");
             rankingiPage  = loadPage("rankingi.fxml");
         } catch (IOException e) {
-            System.err.println("Błąd ładowania widoku: " + e.getMessage());
-            e.printStackTrace();
+            LOG.severe("Błąd ładowania widoku: " + e.getMessage());
         }
 
-        // Wire-up klików w taby.
         navProfil.setOnAction(e -> switchTo(profilePage, navProfil));
         navBohaterowie.setOnAction(e -> switchTo(championsPage, navBohaterowie));
         navMeta.setOnAction(e -> switchTo(metaPage, navMeta));
         navMecze.setOnAction(e -> switchTo(meczePage, navMecze));
         navRankingi.setOnAction(e -> switchTo(rankingiPage, navRankingi));
 
-        // Domyślny widok przy starcie — Profil (jak active w FXML).
-        // activeTab jest jeszcze null → setActive wykryje to i nie próbuje czyścić.
+        if (btnSettings != null) {
+            btnSettings.setOnAction(e -> openSettings());
+        }
+
         switchTo(profilePage, navProfil);
     }
 
-    private Parent loadPage(String fxmlName) throws IOException {
-        URL url = getClass().getResource(fxmlName);
-        if (url == null) {
-            throw new IOException("Nie znaleziono pliku FXML: " + fxmlName);
+    private void openSettings() {
+        try {
+            URL url = getClass().getResource("/com/yuhyfe/loldraftanalyzer/settings.fxml");
+            if (url == null) return;
+            Parent root = FXMLLoader.load(url);
+            Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(contentArea.getScene().getWindow());
+            dialog.setTitle("Ustawienia");
+            dialog.setResizable(false);
+            dialog.setScene(new Scene(root));
+            dialog.showAndWait();
+        } catch (IOException e) {
+            LOG.warning("Nie można otworzyć ustawień: " + e.getMessage());
         }
+    }
+
+    private Parent loadPage(String fxmlName) throws IOException {
+        URL url = getClass().getResource("/com/yuhyfe/loldraftanalyzer/" + fxmlName);
+        if (url == null) throw new IOException("Nie znaleziono pliku FXML: " + fxmlName);
         return FXMLLoader.load(url);
     }
 
@@ -82,22 +93,15 @@ public class MainController {
     }
 
     private void showPlaceholder(String name, Button tab) {
-        Label lbl = new Label("Strona „" + name + "” — w budowie");
+        Label lbl = new Label("Strona \"" + name + "\" - w budowie");
         lbl.getStyleClass().addAll("text-muted", "text-lg");
         contentArea.getChildren().setAll(lbl);
         setActive(tab);
     }
 
-    /**
-     * Aktualizuje wizualnie który tab jest podświetlony (klasa CSS "active").
-     */
     private void setActive(Button newActive) {
-        if (activeTab != null) {
-            activeTab.getStyleClass().remove("active");
-        }
-        if (!newActive.getStyleClass().contains("active")) {
-            newActive.getStyleClass().add("active");
-        }
+        if (activeTab != null) activeTab.getStyleClass().remove("active");
+        if (!newActive.getStyleClass().contains("active")) newActive.getStyleClass().add("active");
         activeTab = newActive;
     }
 }
