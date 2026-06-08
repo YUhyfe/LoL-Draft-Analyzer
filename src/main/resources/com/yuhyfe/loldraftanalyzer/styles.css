@@ -39,8 +39,8 @@
    ============================================================ */
 .top-bar {
     -fx-background-color: linear-gradient(to bottom, #0A1428 0%, #061018 100%);
-    -fx-padding: 14 28 14 28;
-    -fx-spacing: 18;
+    -fx-padding: 14 20 14 20;
+    -fx-spacing: 8;
     -fx-alignment: CENTER_LEFT;
     -fx-border-color: -hex-gold;
     -fx-border-width: 0 0 1 0;
@@ -66,9 +66,9 @@
 .nav-tab {
     -fx-background-color: transparent;
     -fx-text-fill: -hex-text-muted;
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
     -fx-font-weight: 600;
-    -fx-padding: 10 20 10 20;
+    -fx-padding: 8 14 8 14;
     -fx-background-radius: 14;
     -fx-border-radius: 14;
     -fx-cursor: hand;
@@ -97,7 +97,7 @@
     -fx-text-fill: -hex-text;
     -fx-prompt-text-fill: -hex-text-muted;
     -fx-padding: 8 16 8 16;
-    -fx-pref-width: 280;
+    -fx-pref-width: 220;
 }
 .search-field:focused {
     -fx-border-color: -hex-gold;

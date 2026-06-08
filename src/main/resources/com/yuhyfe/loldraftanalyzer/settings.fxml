@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.yuhyfe.loldraftanalyzer.controller.SettingsController"
+      stylesheets="@styles.css"
+      styleClass="content-area"
+      spacing="20"
+      prefWidth="480">
+
+    <padding><Insets top="28" right="28" bottom="20" left="28"/></padding>
+
+    <!-- Title -->
+    <Label text="Ustawienia" styleClass="page-title"/>
+    <Separator/>
+
+    <!-- API KEY -->
+    <VBox spacing="6">
+        <Label text="Klucz Riot API" styleClass="text-bold"/>
+        <Label text="Wymagany do zbierania danych meta z Riot API. Uzyskaj na: developer.riotgames.com"
+               styleClass="text-muted text-sm" wrapText="true"/>
+        <HBox spacing="8" alignment="CENTER_LEFT">
+            <PasswordField fx:id="apiKeyField" promptText="RGAPI-xxxxxxxx-xxxx-…"
+                          HBox.hgrow="ALWAYS" styleClass="search-field"/>
+            <TextField fx:id="apiKeyVisible" promptText="RGAPI-xxxxxxxx-xxxx-…"
+                       HBox.hgrow="ALWAYS" styleClass="search-field"/>
+            <Button text="👁" onAction="#handleToggleVisibility" styleClass="icon-btn"
+                    mnemonicParsing="false"/>
+        </HBox>
+    </VBox>
+
+    <!-- REGION -->
+    <VBox spacing="6">
+        <Label text="Region" styleClass="text-bold"/>
+        <Label text="Twój serwer LoL — używany do odpowiedniego routowania zapytań do Riot API"
+               styleClass="text-muted text-sm"/>
+        <ComboBox fx:id="regionCombo" prefWidth="200"/>
+    </VBox>
+
+    <!-- LOL PATH -->
+    <VBox spacing="6">
+        <Label text="Ścieżka do folderu League of Legends" styleClass="text-bold"/>
+        <Label text="Potrzebna do połączenia z LCU. Zwykle: C:\Riot Games\League of Legends"
+               styleClass="text-muted text-sm" wrapText="true"/>
+        <HBox spacing="8" alignment="CENTER_LEFT">
+            <TextField fx:id="lolPathField" promptText="C:\Riot Games\League of Legends"
+                       HBox.hgrow="ALWAYS" styleClass="search-field"/>
+            <Button text="Przeglądaj…" onAction="#handleBrowseLolPath" styleClass="btn-ghost"
+                    mnemonicParsing="false"/>
+        </HBox>
+    </VBox>
+
+    <Separator/>
+
+    <!-- STATUS -->
+    <Label fx:id="statusLabel" text="" styleClass="text-sm"/>
+
+    <!-- BUTTONS -->
+    <HBox spacing="12" alignment="CENTER_RIGHT">
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Anuluj" onAction="#handleCancel" styleClass="btn-ghost"
+                mnemonicParsing="false"/>
+        <Button text="Zapisz" onAction="#handleSave" styleClass="btn-primary"
+                mnemonicParsing="false" defaultButton="true"/>
+    </HBox>
+
+</VBox>

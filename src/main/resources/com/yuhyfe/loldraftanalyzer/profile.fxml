@@ -4,63 +4,19 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <!--
   profile.fxml — widok profilu gracza
-  Root: VBox. Wkładany później do StackPane (.content-area) w view.fxml
-  przez <fx:include source="profile.fxml" /> + routing w MainController.
+  Root: VBox. Wkładany do StackPane (.content-area) w view.fxml przez MainController.
 -->
 
-
-<BorderPane minHeight="720.0" minWidth="1280.0" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuhyfe.loldraftanalyzer.ProfileController">
-   <top>
-      <HBox prefHeight="70.0" prefWidth="200.0" styleClass="top-bar" BorderPane.alignment="CENTER_LEFT">
-         <children>
-            <Label styleClass="app-logo" text="⚔ DRAFT" />
-            <Label styleClass="app-logo-accent" text="ANALYZER" />
-            <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" text="Profil">
-               <styleClass>
-                  <String fx:value="nav-tab" />
-                  <String fx:value="active" />
-               </styleClass>
-            </Button>
-            <Button mnemonicParsing="false" styleClass="nav-tab" text="Bohaterowie" />
-            <Button mnemonicParsing="false" styleClass="nav-tab" text="Meta" />
-            <Button mnemonicParsing="false" styleClass="nav-tab" text="Mecze" />
-            <Button mnemonicParsing="false" styleClass="nav-tab" text="Rankingi" />
-            <Region prefHeight="200.0" prefWidth="200.0" />
-            <TextField promptText="Przywoływacz lub Bohater ..." styleClass="search-field" />
-            <Button mnemonicParsing="false" styleClass="icon-btn" text="⚙" />
-            <Button mnemonicParsing="false" styleClass="icon-btn" text="?" />
-            <Button mnemonicParsing="false" styleClass="icon-btn" text="👤" />
-         </children>
-      </HBox>
-   </top>
-   <bottom>
-      <HBox prefHeight="32.0" prefWidth="200.0" style="-fx-background-color: #06121C; -fx-padding: 6 24 6 24; -fx-border-color: -hex-border-soft; -fx-border-width: 1 0 0 0;" BorderPane.alignment="CENTER_RIGHT">
-         <children>
-            <Label fx:id="statusLabel" text="v0.1.0 · LCU: łączenie...">
-               <styleClass>
-                  <String fx:value="text-muted" />
-                  <String fx:value="text-sm" />
-               </styleClass>
-            </Label>
-         </children>
-      </HBox>
-   </bottom>
-   <center>
-      <StackPane prefHeight="150.0" prefWidth="200.0" styleClass="content-area" BorderPane.alignment="CENTER">
-         <children>
-            <VBox prefHeight="980.0" prefWidth="1840.0" spacing="24.0">
-               <children>
+<VBox spacing="24.0" styleClass="content-area" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuhyfe.loldraftanalyzer.controller.ProfileController">
+   <children>
                
                          <!-- =========================================================
                         HERO CARD
@@ -167,9 +123,15 @@
                            </VBox>
                        </VBox>
                    </HBox>
+
+                   <!-- Status bar -->
+                   <HBox prefHeight="32.0" style="-fx-background-color: #06121C; -fx-padding: 6 24 6 24; -fx-border-color: -hex-border-soft; -fx-border-width: 1 0 0 0;">
+                       <Label fx:id="statusLabel" text="v0.1.0 · LCU: łączenie...">
+                           <styleClass>
+                               <java.lang.String fx:value="text-muted" />
+                               <java.lang.String fx:value="text-sm" />
+                           </styleClass>
+                       </Label>
+                   </HBox>
                </children>
-            </VBox>
-         </children>
-      </StackPane>
-   </center>
-</BorderPane>
+</VBox>

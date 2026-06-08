@@ -11,80 +11,77 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <!--
-  champions.fxml — siatka wszystkich postaci z filtrowaniem i sortowaniem.
-  Root: VBox. Wkładany do StackPane content-area w view.fxml przez fx:include.
+  champions.fxml — statystyki gracza per bohater z ostatnich 100 meczów.
+  Root: VBox. Wkładany do StackPane content-area w view.fxml przez MainController.
 -->
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.yuhyfe.loldraftanalyzer.controller.ChampionsController"
       stylesheets="@styles.css"
       styleClass="content-area"
-      spacing="20"
-      prefWidth="1840"
-      prefHeight="980"
-      maxWidth="1700">
-    <padding>
-        <Insets top="8" right="0" bottom="8" left="0"/>
-    </padding>
+      spacing="20">
 
     <!-- =========================================================
-         HEADER: tytuł + licznik + search
+         HEADER
          ========================================================= -->
-    <HBox spacing="20" alignment="CENTER_LEFT">
-        <Label text="Bohaterowie" styleClass="page-title"/>
-        <Label text="168 z 168 postaci  ·  Patch 14.X" styleClass="text-muted text-sm"/>
+    <HBox spacing="16" alignment="CENTER_LEFT">
+        <Label text="Twoi Bohaterowie" styleClass="page-title"/>
+        <Label text="Statystyki z ostatnich 100 meczów" styleClass="text-muted text-sm"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <TextField promptText="Szukaj postaci..." styleClass="search-field" prefWidth="320"/>
+        <Button onAction="#handleRefresh" styleClass="btn-ghost" text="↻ Odśwież"/>
+        <TextField fx:id="searchField" promptText="Szukaj postaci..." styleClass="search-field" prefWidth="240"/>
     </HBox>
 
     <!-- =========================================================
-         FILTERS: role chips + sort dropdown
+         FILTERS
          ========================================================= -->
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <Button text="Wszystkie" styleClass="filter-chip active"/>
-        <Button text="TOP" styleClass="filter-chip"/>
-        <Button text="JUNGLE" styleClass="filter-chip"/>
-        <Button text="MID" styleClass="filter-chip"/>
-        <Button text="ADC" styleClass="filter-chip"/>
-        <Button text="SUPPORT" styleClass="filter-chip"/>
+        <Button fx:id="filterAll" text="Wszystkie" onAction="#handleFilterAll">
+            <styleClass><String fx:value="filter-chip"/><String fx:value="active"/></styleClass>
+        </Button>
+        <Button fx:id="filterTop"     text="TOP"       styleClass="filter-chip"/>
+        <Button fx:id="filterJungle"  text="JUNGLE"    styleClass="filter-chip"/>
+        <Button fx:id="filterMid"     text="MID"       styleClass="filter-chip"/>
+        <Button fx:id="filterAdc"     text="ADC"       styleClass="filter-chip"/>
+        <Button fx:id="filterSupport" text="SUPPORT"   styleClass="filter-chip"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Label text="Sortuj według:" styleClass="text-muted text-sm"/>
-        <ComboBox prefWidth="160" value="Tier">
+        <Label text="Sortuj:" styleClass="text-muted text-sm"/>
+        <ComboBox fx:id="sortCombo" prefWidth="180">
             <items>
                 <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Tier"/>
-                    <String fx:value="Winrate"/>
-                    <String fx:value="Pickrate"/>
-                    <String fx:value="Banrate"/>
+                    <String fx:value="Gry (malejąco)"/>
+                    <String fx:value="Winrate (malejąco)"/>
+                    <String fx:value="KDA (malejąco)"/>
                     <String fx:value="Alfabetycznie"/>
                 </FXCollections>
             </items>
+            <value><String fx:value="Gry (malejąco)"/></value>
         </ComboBox>
     </HBox>
 
     <!-- =========================================================
-         KPI STRIP — szybki przegląd mety
+         KPI STRIP
          ========================================================= -->
     <HBox spacing="16">
         <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-            <Label text="5" styleClass="kpi-value" style="-fx-text-fill: #FF006E;"/>
-            <Label text="POSTACI W S+ TIER" styleClass="kpi-label"/>
+            <Label fx:id="kpiPlayed" styleClass="kpi-value kpi-value-info" text="—"/>
+            <Label styleClass="kpi-label" text="UNIKALNYCH POSTACI"/>
         </VBox>
         <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-            <Label text="10" styleClass="kpi-value kpi-value-success"/>
-            <Label text="POSTACI W S TIER" styleClass="kpi-label"/>
+            <Label fx:id="kpiTopChamp" styleClass="kpi-value kpi-value-warn" text="—"/>
+            <Label styleClass="kpi-label" text="ULUBIONA POSTAĆ"/>
         </VBox>
         <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-            <Label text="JUNGLE" styleClass="kpi-value kpi-value-info"/>
-            <Label text="DOMINUJĄCA ROLA" styleClass="kpi-label"/>
+            <Label fx:id="kpiTopRole" styleClass="kpi-value kpi-value-success" text="—"/>
+            <Label styleClass="kpi-label" text="GŁÓWNA ROLA"/>
         </VBox>
         <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-            <Label text="50.4%" styleClass="kpi-value kpi-value-warn"/>
-            <Label text="ŚREDNI WINRATE META" styleClass="kpi-label"/>
+            <Label fx:id="kpiOverallWr" styleClass="kpi-value" text="—"/>
+            <Label styleClass="kpi-label" text="OGÓLNY WINRATE"/>
         </VBox>
     </HBox>
 
@@ -95,769 +92,22 @@
                 minHeight="0" prefViewportHeight="0"
                 hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
                 style="-fx-background: transparent; -fx-background-color: transparent;">
-        <FlowPane hgap="16" vgap="16" prefWrapLength="1680"
+        <FlowPane fx:id="champGrid" hgap="16" vgap="16"
                   alignment="TOP_LEFT" rowValignment="TOP">
-
-            <!-- ============ S+ TIER ============ -->
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-jungle" prefHeight="140">
-                    <Label text="B" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S+" styleClass="tier-badge tier-sp"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="JG" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Briar" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="56.2%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="14.3% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-mid" prefHeight="140">
-                    <Label text="Y" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S+" styleClass="tier-badge tier-sp"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="MID" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Yone" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="55.8%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="12.7% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-jungle" prefHeight="140">
-                    <Label text="S" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S+" styleClass="tier-badge tier-sp"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="JG" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Shyvana" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="55.4%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="8.9% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-jungle" prefHeight="140">
-                    <Label text="R" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S+" styleClass="tier-badge tier-sp"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="JG" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Rammus" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="55.1%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="7.2% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-mid" prefHeight="140">
-                    <Label text="A" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S+" styleClass="tier-badge tier-sp"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="MID" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Ambessa" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="54.9%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="11.4% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <!-- ============ S TIER ============ -->
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-jungle" prefHeight="140">
-                    <Label text="L" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S" styleClass="tier-badge tier-s"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="JG" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Lee Sin" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="51.2%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="18.4% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-jungle" prefHeight="140">
-                    <Label text="V" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S" styleClass="tier-badge tier-s"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="JG" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Viego" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="51.8%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="14.2% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-jungle" prefHeight="140">
-                    <Label text="G" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S" styleClass="tier-badge tier-s"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="JG" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Graves" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="53.1%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="9.7% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-jungle" prefHeight="140">
-                    <Label text="M" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S" styleClass="tier-badge tier-s"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="JG" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Master Yi" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="53.7%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="8.4% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-mid" prefHeight="140">
-                    <Label text="A" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S" styleClass="tier-badge tier-s"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="MID" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Ahri" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="52.3%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="10.1% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-mid" prefHeight="140">
-                    <Label text="Y" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S" styleClass="tier-badge tier-s"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="MID" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Yasuo" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="51.9%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="9.8% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-mid" prefHeight="140">
-                    <Label text="A" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S" styleClass="tier-badge tier-s"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="MID" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Akali" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="52.7%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="8.3% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-mid" prefHeight="140">
-                    <Label text="S" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S" styleClass="tier-badge tier-s"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="MID" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Sylas" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="53.1%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="7.9% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-adc" prefHeight="140">
-                    <Label text="J" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S" styleClass="tier-badge tier-s"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="ADC" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Jinx" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="53.6%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="14.1% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-adc" prefHeight="140">
-                    <Label text="C" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="S" styleClass="tier-badge tier-s"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="ADC" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Caitlyn" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="52.1%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="13.4% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <!-- ============ A TIER ============ -->
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-top" prefHeight="140">
-                    <Label text="G" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="A" styleClass="tier-badge tier-a"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="TOP" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Garen" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="51.3%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="6.2% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-top" prefHeight="140">
-                    <Label text="D" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="A" styleClass="tier-badge tier-a"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="TOP" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Darius" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="50.8%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="7.4% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-top" prefHeight="140">
-                    <Label text="S" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="A" styleClass="tier-badge tier-a"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="TOP" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Sett" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="50.4%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="5.8% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-top" prefHeight="140">
-                    <Label text="W" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="A" styleClass="tier-badge tier-a"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="TOP" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Wukong" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="51.7%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="5.3% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-jungle" prefHeight="140">
-                    <Label text="K" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="A" styleClass="tier-badge tier-a"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="JG" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Kayn" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="51.1%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="7.1% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-jungle" prefHeight="140">
-                    <Label text="H" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="A" styleClass="tier-badge tier-a"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="JG" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Hecarim" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="50.9%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="6.4% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-mid" prefHeight="140">
-                    <Label text="L" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="A" styleClass="tier-badge tier-a"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="MID" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="LeBlanc" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="50.2%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="4.7% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-adc" prefHeight="140">
-                    <Label text="E" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="A" styleClass="tier-badge tier-a"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="ADC" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Ezreal" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="50.5%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="11.2% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-sup" prefHeight="140">
-                    <Label text="S" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="A" styleClass="tier-badge tier-a"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="SUP" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Senna" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="51.4%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="8.3% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-sup" prefHeight="140">
-                    <Label text="L" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="A" styleClass="tier-badge tier-a"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="SUP" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Lulu" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="52.3%" styleClass="text-success text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="7.4% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <!-- ============ B TIER ============ -->
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-top" prefHeight="140">
-                    <Label text="A" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="B" styleClass="tier-badge tier-b"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="TOP" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Aatrox" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="49.8%" styleClass="text-muted text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="5.1% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-mid" prefHeight="140">
-                    <Label text="Z" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="B" styleClass="tier-badge tier-b"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="MID" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Zed" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="49.7%" styleClass="text-muted text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="8.2% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-adc" prefHeight="140">
-                    <Label text="V" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="B" styleClass="tier-badge tier-b"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="ADC" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Vayne" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="49.5%" styleClass="text-muted text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="6.3% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-adc" prefHeight="140">
-                    <Label text="L" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="B" styleClass="tier-badge tier-b"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="ADC" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Lucian" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="49.8%" styleClass="text-muted text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="5.9% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-sup" prefHeight="140">
-                    <Label text="T" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="B" styleClass="tier-badge tier-b"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="SUP" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Thresh" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="49.7%" styleClass="text-muted text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="9.1% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <!-- ============ C TIER ============ -->
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-top" prefHeight="140">
-                    <Label text="S" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="C" styleClass="tier-badge tier-c"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="TOP" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Singed" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="48.4%" styleClass="text-muted text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="1.8% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-jungle" prefHeight="140">
-                    <Label text="K" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="C" styleClass="tier-badge tier-c"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="JG" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Karthus" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="48.6%" styleClass="text-muted text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="2.1% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <!-- ============ D TIER ============ -->
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-mid" prefHeight="140">
-                    <Label text="H" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="D" styleClass="tier-badge tier-d"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="MID" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Heimerdinger" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="46.2%" styleClass="text-danger text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="1.1% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
-            <VBox styleClass="champ-card" prefWidth="160" maxWidth="160">
-                <StackPane styleClass="champ-portrait champ-portrait-bg-mid" prefHeight="140">
-                    <Label text="A" styleClass="champ-letter"/>
-                    <HBox alignment="TOP_RIGHT" StackPane.alignment="TOP_RIGHT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="D" styleClass="tier-badge tier-d"/>
-                    </HBox>
-                    <HBox alignment="BOTTOM_LEFT" StackPane.alignment="BOTTOM_LEFT">
-                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
-                        <Label text="MID" styleClass="role-chip-mini"/>
-                    </HBox>
-                </StackPane>
-                <VBox styleClass="champ-info" spacing="4">
-                    <Label text="Aurelion Sol" styleClass="champ-name"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="45.8%" styleClass="text-danger text-bold text-sm"/>
-                        <Label text="·" styleClass="text-muted text-sm"/>
-                        <Label text="1.4% PR" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-            </VBox>
-
+            <padding>
+                <Insets bottom="8"/>
+            </padding>
         </FlowPane>
     </ScrollPane>
+
+    <!-- STATUS BAR -->
+    <HBox prefHeight="32.0" style="-fx-background-color: #06121C; -fx-padding: 6 24 6 24; -fx-border-color: -hex-border-soft; -fx-border-width: 1 0 0 0;">
+        <Label fx:id="statusLabel" text="v0.1.0 · ładowanie...">
+            <styleClass>
+                <String fx:value="text-muted"/>
+                <String fx:value="text-sm"/>
+            </styleClass>
+        </Label>
+    </HBox>
+
 </VBox>

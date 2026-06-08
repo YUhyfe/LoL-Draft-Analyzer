@@ -6,406 +6,60 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <!--
-  rankingi.fxml — top gracze: podium #1-#3 + leaderboard #4+
+  rankingi.fxml — leaderboard serwera (Riot API) lub własne statystyki (LCU).
 -->
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.yuhyfe.loldraftanalyzer.controller.RankingsController"
       stylesheets="@styles.css"
       styleClass="content-area"
-      spacing="20"
-      prefWidth="1840"
-      prefHeight="980"
-      maxWidth="1700">
-    <padding>
-        <Insets top="8" right="0" bottom="8" left="0"/>
-    </padding>
+      spacing="20">
 
     <!-- HEADER -->
-    <HBox spacing="20" alignment="CENTER_LEFT">
+    <HBox spacing="16" alignment="CENTER_LEFT">
         <Label text="Rankingi" styleClass="page-title"/>
-        <Label text="Top 200 graczy  ·  aktualizacja: 5 min temu" styleClass="text-muted text-sm"/>
+        <Label text="Dane z Riot API — Challenger / Grandmaster / Master" styleClass="text-muted text-sm"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <TextField promptText="Szukaj przywoływacza..." styleClass="search-field" prefWidth="320"/>
+        <Button onAction="#handleRefresh" styleClass="btn-ghost" text="↻ Odśwież"/>
     </HBox>
 
     <!-- FILTERS -->
     <HBox spacing="12" alignment="CENTER_LEFT">
-        <Label text="Region:" styleClass="text-muted text-sm"/>
-        <ComboBox prefWidth="120" value="EUW1">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="EUW1"/>
-                    <String fx:value="EUNE"/>
-                    <String fx:value="NA"/>
-                    <String fx:value="KR"/>
-                    <String fx:value="BR"/>
-                    <String fx:value="LAN"/>
-                    <String fx:value="LAS"/>
-                    <String fx:value="JP"/>
-                    <String fx:value="OCE"/>
-                    <String fx:value="TR"/>
-                    <String fx:value="RU"/>
-                </FXCollections>
-            </items>
-        </ComboBox>
-        <Region prefWidth="20"/>
-        <Button text="Solo/Duo" styleClass="filter-chip active"/>
-        <Button text="Flex" styleClass="filter-chip"/>
-        <Button text="TFT" styleClass="filter-chip"/>
+        <Button fx:id="btnSolo" onAction="#handleSolo" text="Solo/Duo">
+            <styleClass><String fx:value="filter-chip"/><String fx:value="active"/></styleClass>
+        </Button>
+        <Button fx:id="btnFlex" onAction="#handleFlex" text="Flex 5v5" styleClass="filter-chip"/>
         <Region HBox.hgrow="ALWAYS"/>
         <Label text="Tier:" styleClass="text-muted text-sm"/>
-        <ComboBox prefWidth="140" value="Challenger">
+        <ComboBox fx:id="tierCombo" prefWidth="160">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Challenger"/>
                     <String fx:value="Grandmaster"/>
                     <String fx:value="Master"/>
-                    <String fx:value="Diamond+"/>
                 </FXCollections>
             </items>
         </ComboBox>
     </HBox>
 
-    <!-- PODIUM TOP 3 -->
-    <HBox spacing="24" alignment="CENTER">
+    <!-- DYNAMIC CONTENT AREA -->
+    <VBox fx:id="contentArea" spacing="20" VBox.vgrow="ALWAYS"/>
 
-        <!-- #2 SILVER -->
-        <VBox styleClass="podium-card podium-2" HBox.hgrow="ALWAYS" prefWidth="380">
-            <Label text="2" styleClass="rank-position rank-position-silver text-bold" style="-fx-font-size: 24px; -fx-min-width: 60; -fx-min-height: 60; -fx-pref-width: 60; -fx-pref-height: 60;"/>
-            <Region styleClass="podium-avatar"
-                    style="-fx-background-color: linear-gradient(to bottom right, #E8E8E8, #9CA3AF); -fx-border-color: #E8E8E8;"/>
-            <Label text="Caps" styleClass="summoner-name" style="-fx-font-size: 26px;"/>
-            <Label text="#G2  ·  EUW1" styleClass="summoner-tag" style="-fx-font-size: 14px;"/>
-            <HBox spacing="8" alignment="CENTER">
-                <Label text="Challenger" styleClass="chip-gold"/>
-                <Label text="1837 LP" styleClass="chip"/>
-            </HBox>
-            <HBox spacing="20" alignment="CENTER">
-                <VBox alignment="CENTER">
-                    <Label text="62.4%" styleClass="text-success text-bold text-lg"/>
-                    <Label text="WIN RATE" styleClass="kpi-label"/>
-                </VBox>
-                <VBox alignment="CENTER">
-                    <Label text="487" styleClass="text-bold text-lg"/>
-                    <Label text="GRY" styleClass="kpi-label"/>
-                </VBox>
-                <VBox alignment="CENTER">
-                    <Label text="▲ +12" styleClass="trend-up"/>
-                    <Label text="DZIŚ" styleClass="kpi-label"/>
-                </VBox>
-            </HBox>
-        </VBox>
-
-        <!-- #1 GOLD -->
-        <VBox styleClass="podium-card podium-1" HBox.hgrow="ALWAYS" prefWidth="420">
-            <Label text="1" styleClass="rank-position rank-position-gold text-bold" style="-fx-font-size: 28px; -fx-min-width: 68; -fx-min-height: 68; -fx-pref-width: 68; -fx-pref-height: 68;"/>
-            <Region styleClass="podium-avatar"
-                    style="-fx-background-color: linear-gradient(to bottom right, #FFD700, #C8AA6E); -fx-border-color: #FFD700; -fx-min-width: 110; -fx-min-height: 110; -fx-max-width: 110; -fx-max-height: 110;"/>
-            <Label text="Faker" styleClass="summoner-name" style="-fx-font-size: 30px;"/>
-            <Label text="#T1  ·  KR" styleClass="summoner-tag" style="-fx-font-size: 16px;"/>
-            <HBox spacing="8" alignment="CENTER">
-                <Label text="Challenger" styleClass="chip-gold"/>
-                <Label text="2104 LP" styleClass="chip"/>
-            </HBox>
-            <HBox spacing="20" alignment="CENTER">
-                <VBox alignment="CENTER">
-                    <Label text="68.1%" styleClass="text-success text-bold text-lg"/>
-                    <Label text="WIN RATE" styleClass="kpi-label"/>
-                </VBox>
-                <VBox alignment="CENTER">
-                    <Label text="612" styleClass="text-bold text-lg"/>
-                    <Label text="GRY" styleClass="kpi-label"/>
-                </VBox>
-                <VBox alignment="CENTER">
-                    <Label text="▲ +34" styleClass="trend-up"/>
-                    <Label text="DZIŚ" styleClass="kpi-label"/>
-                </VBox>
-            </HBox>
-        </VBox>
-
-        <!-- #3 BRONZE -->
-        <VBox styleClass="podium-card podium-3" HBox.hgrow="ALWAYS" prefWidth="380">
-            <Label text="3" styleClass="rank-position rank-position-bronze text-bold" style="-fx-font-size: 24px; -fx-min-width: 60; -fx-min-height: 60; -fx-pref-width: 60; -fx-pref-height: 60;"/>
-            <Region styleClass="podium-avatar"
-                    style="-fx-background-color: linear-gradient(to bottom right, #CD7F32, #8B5A2B); -fx-border-color: #CD7F32;"/>
-            <Label text="Chovy" styleClass="summoner-name" style="-fx-font-size: 26px;"/>
-            <Label text="#GenG  ·  KR" styleClass="summoner-tag" style="-fx-font-size: 14px;"/>
-            <HBox spacing="8" alignment="CENTER">
-                <Label text="Challenger" styleClass="chip-gold"/>
-                <Label text="1791 LP" styleClass="chip"/>
-            </HBox>
-            <HBox spacing="20" alignment="CENTER">
-                <VBox alignment="CENTER">
-                    <Label text="59.8%" styleClass="text-success text-bold text-lg"/>
-                    <Label text="WIN RATE" styleClass="kpi-label"/>
-                </VBox>
-                <VBox alignment="CENTER">
-                    <Label text="524" styleClass="text-bold text-lg"/>
-                    <Label text="GRY" styleClass="kpi-label"/>
-                </VBox>
-                <VBox alignment="CENTER">
-                    <Label text="▼ -8" styleClass="trend-down"/>
-                    <Label text="DZIŚ" styleClass="kpi-label"/>
-                </VBox>
-            </HBox>
-        </VBox>
+    <!-- STATUS BAR -->
+    <HBox prefHeight="32"
+          style="-fx-background-color: #06121C; -fx-padding: 6 24 6 24; -fx-border-color: -hex-border-soft; -fx-border-width: 1 0 0 0;">
+        <Label fx:id="statusLabel" text="ładowanie...">
+            <styleClass>
+                <String fx:value="text-muted"/>
+                <String fx:value="text-sm"/>
+            </styleClass>
+        </Label>
     </HBox>
 
-    <!-- LEADERBOARD #4+ -->
-    <VBox styleClass="card" VBox.vgrow="ALWAYS" spacing="12">
-        <HBox alignment="CENTER_LEFT" spacing="12">
-            <Label text="Pełny ranking" styleClass="section-title" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-            <Label text="Pokazane: 4-15 z 200" styleClass="text-muted text-sm"/>
-        </HBox>
-
-        <!-- Column headers -->
-        <HBox spacing="20" alignment="CENTER_LEFT">
-            <padding><Insets top="0" right="22" bottom="0" left="22"/></padding>
-            <Label text="#" styleClass="kpi-label" prefWidth="48"/>
-            <Label text="GRACZ" styleClass="kpi-label" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-            <Label text="TIER / LP" styleClass="kpi-label" prefWidth="180"/>
-            <Label text="WIN RATE" styleClass="kpi-label" prefWidth="110"/>
-            <Label text="GRY" styleClass="kpi-label" prefWidth="80"/>
-            <Label text="TREND" styleClass="kpi-label" prefWidth="80"/>
-        </HBox>
-
-        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
-                    minHeight="0" prefViewportHeight="0"
-                    hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
-                    style="-fx-background: transparent; -fx-background-color: transparent;">
-            <VBox spacing="8">
-
-                <!-- #4 -->
-                <HBox styleClass="rank-row" spacing="20" alignment="CENTER_LEFT">
-                    <Label text="4" styleClass="rank-position"/>
-                    <Region prefWidth="40" prefHeight="40" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40"
-                            style="-fx-background-color: linear-gradient(to bottom right, #8B5CF6, #6D28D9); -fx-background-radius: 999;"/>
-                    <VBox HBox.hgrow="ALWAYS" spacing="2">
-                        <Label text="Hide on Bush" styleClass="text-bold text-gold"/>
-                        <Label text="#KR1  ·  Mid Lane" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <VBox prefWidth="180" spacing="2">
-                        <Label text="Challenger" styleClass="text-bold text-gold"/>
-                        <Label text="1742 LP" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <Label text="57.3%" styleClass="text-success text-bold" prefWidth="110"/>
-                    <Label text="498" styleClass="text-bold" prefWidth="80"/>
-                    <Label text="▲ +6" styleClass="trend-up" prefWidth="80"/>
-                </HBox>
-
-                <!-- #5 -->
-                <HBox styleClass="rank-row" spacing="20" alignment="CENTER_LEFT">
-                    <Label text="5" styleClass="rank-position"/>
-                    <Region prefWidth="40" prefHeight="40" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40"
-                            style="-fx-background-color: linear-gradient(to bottom right, #06D6F9, #0397AB); -fx-background-radius: 999;"/>
-                    <VBox HBox.hgrow="ALWAYS" spacing="2">
-                        <Label text="Showmaker" styleClass="text-bold text-gold"/>
-                        <Label text="#DK  ·  Mid Lane" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <VBox prefWidth="180" spacing="2">
-                        <Label text="Challenger" styleClass="text-bold text-gold"/>
-                        <Label text="1689 LP" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <Label text="56.1%" styleClass="text-success text-bold" prefWidth="110"/>
-                    <Label text="543" styleClass="text-bold" prefWidth="80"/>
-                    <Label text="▼ -3" styleClass="trend-down" prefWidth="80"/>
-                </HBox>
-
-                <!-- #6 -->
-                <HBox styleClass="rank-row" spacing="20" alignment="CENTER_LEFT">
-                    <Label text="6" styleClass="rank-position"/>
-                    <Region prefWidth="40" prefHeight="40" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40"
-                            style="-fx-background-color: linear-gradient(to bottom right, #FB7185, #C2185B); -fx-background-radius: 999;"/>
-                    <VBox HBox.hgrow="ALWAYS" spacing="2">
-                        <Label text="Ruler" styleClass="text-bold text-gold"/>
-                        <Label text="#GenG  ·  ADC" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <VBox prefWidth="180" spacing="2">
-                        <Label text="Challenger" styleClass="text-bold text-gold"/>
-                        <Label text="1654 LP" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <Label text="58.4%" styleClass="text-success text-bold" prefWidth="110"/>
-                    <Label text="412" styleClass="text-bold" prefWidth="80"/>
-                    <Label text="▲ +18" styleClass="trend-up" prefWidth="80"/>
-                </HBox>
-
-                <!-- #7 -->
-                <HBox styleClass="rank-row" spacing="20" alignment="CENTER_LEFT">
-                    <Label text="7" styleClass="rank-position"/>
-                    <Region prefWidth="40" prefHeight="40" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40"
-                            style="-fx-background-color: linear-gradient(to bottom right, #4ADE80, #16A34A); -fx-background-radius: 999;"/>
-                    <VBox HBox.hgrow="ALWAYS" spacing="2">
-                        <Label text="Canyon" styleClass="text-bold text-gold"/>
-                        <Label text="#GenG  ·  Jungle" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <VBox prefWidth="180" spacing="2">
-                        <Label text="Challenger" styleClass="text-bold text-gold"/>
-                        <Label text="1621 LP" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <Label text="55.7%" styleClass="text-success text-bold" prefWidth="110"/>
-                    <Label text="389" styleClass="text-bold" prefWidth="80"/>
-                    <Label text="▬ 0" styleClass="trend-flat" prefWidth="80"/>
-                </HBox>
-
-                <!-- #8 -->
-                <HBox styleClass="rank-row" spacing="20" alignment="CENTER_LEFT">
-                    <Label text="8" styleClass="rank-position"/>
-                    <Region prefWidth="40" prefHeight="40" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40"
-                            style="-fx-background-color: linear-gradient(to bottom right, #FBBF24, #D97706); -fx-background-radius: 999;"/>
-                    <VBox HBox.hgrow="ALWAYS" spacing="2">
-                        <Label text="Keria" styleClass="text-bold text-gold"/>
-                        <Label text="#T1  ·  Support" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <VBox prefWidth="180" spacing="2">
-                        <Label text="Challenger" styleClass="text-bold text-gold"/>
-                        <Label text="1598 LP" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <Label text="54.2%" styleClass="text-success text-bold" prefWidth="110"/>
-                    <Label text="467" styleClass="text-bold" prefWidth="80"/>
-                    <Label text="▲ +4" styleClass="trend-up" prefWidth="80"/>
-                </HBox>
-
-                <!-- #9 -->
-                <HBox styleClass="rank-row" spacing="20" alignment="CENTER_LEFT">
-                    <Label text="9" styleClass="rank-position"/>
-                    <Region prefWidth="40" prefHeight="40" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40"
-                            style="-fx-background-color: linear-gradient(to bottom right, #A78BFA, #6D28D9); -fx-background-radius: 999;"/>
-                    <VBox HBox.hgrow="ALWAYS" spacing="2">
-                        <Label text="Doinb" styleClass="text-bold text-gold"/>
-                        <Label text="#FPX  ·  Mid Lane" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <VBox prefWidth="180" spacing="2">
-                        <Label text="Challenger" styleClass="text-bold text-gold"/>
-                        <Label text="1567 LP" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <Label text="56.8%" styleClass="text-success text-bold" prefWidth="110"/>
-                    <Label text="421" styleClass="text-bold" prefWidth="80"/>
-                    <Label text="▼ -2" styleClass="trend-down" prefWidth="80"/>
-                </HBox>
-
-                <!-- #10 -->
-                <HBox styleClass="rank-row" spacing="20" alignment="CENTER_LEFT">
-                    <Label text="10" styleClass="rank-position"/>
-                    <Region prefWidth="40" prefHeight="40" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40"
-                            style="-fx-background-color: linear-gradient(to bottom right, #00F5D4, #0397AB); -fx-background-radius: 999;"/>
-                    <VBox HBox.hgrow="ALWAYS" spacing="2">
-                        <Label text="Knight" styleClass="text-bold text-gold"/>
-                        <Label text="#JDG  ·  Mid Lane" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <VBox prefWidth="180" spacing="2">
-                        <Label text="Challenger" styleClass="text-bold text-gold"/>
-                        <Label text="1543 LP" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <Label text="55.9%" styleClass="text-success text-bold" prefWidth="110"/>
-                    <Label text="398" styleClass="text-bold" prefWidth="80"/>
-                    <Label text="▲ +11" styleClass="trend-up" prefWidth="80"/>
-                </HBox>
-
-                <!-- #11 -->
-                <HBox styleClass="rank-row" spacing="20" alignment="CENTER_LEFT">
-                    <Label text="11" styleClass="rank-position"/>
-                    <Region prefWidth="40" prefHeight="40" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40"
-                            style="-fx-background-color: linear-gradient(to bottom right, #E94560, #8B0000); -fx-background-radius: 999;"/>
-                    <VBox HBox.hgrow="ALWAYS" spacing="2">
-                        <Label text="Rekkles" styleClass="text-bold text-gold"/>
-                        <Label text="#FNC  ·  ADC" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <VBox prefWidth="180" spacing="2">
-                        <Label text="Grandmaster" styleClass="text-bold text-gold"/>
-                        <Label text="1521 LP" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <Label text="53.8%" styleClass="text-success text-bold" prefWidth="110"/>
-                    <Label text="356" styleClass="text-bold" prefWidth="80"/>
-                    <Label text="▼ -7" styleClass="trend-down" prefWidth="80"/>
-                </HBox>
-
-                <!-- #12 -->
-                <HBox styleClass="rank-row" spacing="20" alignment="CENTER_LEFT">
-                    <Label text="12" styleClass="rank-position"/>
-                    <Region prefWidth="40" prefHeight="40" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40"
-                            style="-fx-background-color: linear-gradient(to bottom right, #8338EC, #3A0CA3); -fx-background-radius: 999;"/>
-                    <VBox HBox.hgrow="ALWAYS" spacing="2">
-                        <Label text="Perkz" styleClass="text-bold text-gold"/>
-                        <Label text="#G2  ·  Mid Lane" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <VBox prefWidth="180" spacing="2">
-                        <Label text="Grandmaster" styleClass="text-bold text-gold"/>
-                        <Label text="1487 LP" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <Label text="52.4%" styleClass="text-success text-bold" prefWidth="110"/>
-                    <Label text="412" styleClass="text-bold" prefWidth="80"/>
-                    <Label text="▲ +3" styleClass="trend-up" prefWidth="80"/>
-                </HBox>
-
-                <!-- #13 -->
-                <HBox styleClass="rank-row" spacing="20" alignment="CENTER_LEFT">
-                    <Label text="13" styleClass="rank-position"/>
-                    <Region prefWidth="40" prefHeight="40" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40"
-                            style="-fx-background-color: linear-gradient(to bottom right, #3A86FF, #1B4965); -fx-background-radius: 999;"/>
-                    <VBox HBox.hgrow="ALWAYS" spacing="2">
-                        <Label text="Jankos" styleClass="text-bold text-gold"/>
-                        <Label text="#G2  ·  Jungle" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <VBox prefWidth="180" spacing="2">
-                        <Label text="Grandmaster" styleClass="text-bold text-gold"/>
-                        <Label text="1452 LP" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <Label text="51.7%" styleClass="text-success text-bold" prefWidth="110"/>
-                    <Label text="478" styleClass="text-bold" prefWidth="80"/>
-                    <Label text="▬ 0" styleClass="trend-flat" prefWidth="80"/>
-                </HBox>
-
-                <!-- #14 -->
-                <HBox styleClass="rank-row" spacing="20" alignment="CENTER_LEFT">
-                    <Label text="14" styleClass="rank-position"/>
-                    <Region prefWidth="40" prefHeight="40" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40"
-                            style="-fx-background-color: linear-gradient(to bottom right, #F472B6, #DB2777); -fx-background-radius: 999;"/>
-                    <VBox HBox.hgrow="ALWAYS" spacing="2">
-                        <Label text="BrokenBlade" styleClass="text-bold text-gold"/>
-                        <Label text="#G2  ·  Top Lane" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <VBox prefWidth="180" spacing="2">
-                        <Label text="Grandmaster" styleClass="text-bold text-gold"/>
-                        <Label text="1421 LP" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <Label text="50.9%" styleClass="text-gold text-bold" prefWidth="110"/>
-                    <Label text="384" styleClass="text-bold" prefWidth="80"/>
-                    <Label text="▼ -5" styleClass="trend-down" prefWidth="80"/>
-                </HBox>
-
-                <!-- #15 -->
-                <HBox styleClass="rank-row" spacing="20" alignment="CENTER_LEFT">
-                    <Label text="15" styleClass="rank-position"/>
-                    <Region prefWidth="40" prefHeight="40" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40"
-                            style="-fx-background-color: linear-gradient(to bottom right, #16A34A, #0F5132); -fx-background-radius: 999;"/>
-                    <VBox HBox.hgrow="ALWAYS" spacing="2">
-                        <Label text="Mikyx" styleClass="text-bold text-gold"/>
-                        <Label text="#G2  ·  Support" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <VBox prefWidth="180" spacing="2">
-                        <Label text="Grandmaster" styleClass="text-bold text-gold"/>
-                        <Label text="1398 LP" styleClass="text-muted text-sm"/>
-                    </VBox>
-                    <Label text="49.8%" styleClass="text-muted text-bold" prefWidth="110"/>
-                    <Label text="423" styleClass="text-bold" prefWidth="80"/>
-                    <Label text="▲ +2" styleClass="trend-up" prefWidth="80"/>
-                </HBox>
-
-            </VBox>
-        </ScrollPane>
-
-        <HBox alignment="CENTER" spacing="10">
-            <padding><Insets top="8" right="0" bottom="0" left="0"/></padding>
-            <Button text="Wczytaj więcej (15-50)" styleClass="btn-ghost"/>
-            <Button text="Pokaż top 200" styleClass="btn-primary"/>
-        </HBox>
-    </VBox>
 </VBox>

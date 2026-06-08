@@ -7,10 +7,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.StackPane?>
 
 
-<BorderPane minHeight="720.0" minWidth="1280.0" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuhyfe.loldraftanalyzer.MainController">
+<BorderPane minHeight="680.0" minWidth="1024.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuhyfe.loldraftanalyzer.controller.MainController">
    <top>
       <HBox prefHeight="70.0" prefWidth="200.0" styleClass="top-bar" BorderPane.alignment="CENTER_LEFT">
          <children>
@@ -27,17 +28,15 @@
             <Button fx:id="navMeta" mnemonicParsing="false" styleClass="nav-tab" text="Meta" />
             <Button fx:id="navMecze" mnemonicParsing="false" styleClass="nav-tab" text="Mecze" />
             <Button fx:id="navRankingi" mnemonicParsing="false" styleClass="nav-tab" text="Rankingi" />
-            <Region prefHeight="200.0" prefWidth="200.0" />
-            <TextField promptText="Przywoływacz lub Bohater ..." styleClass="search-field" />
-            <Button mnemonicParsing="false" styleClass="icon-btn" text="⚙" />
-            <Button mnemonicParsing="false" styleClass="icon-btn" text="?" />
-            <Button mnemonicParsing="false" styleClass="icon-btn" text="👤" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnSettings" mnemonicParsing="false" styleClass="icon-btn" text="⚙" />
          </children>
       </HBox>
    </top>
    <center>
-      <StackPane fx:id="contentArea" prefHeight="150.0" prefWidth="200.0" styleClass="content-area" BorderPane.alignment="CENTER" />
-
+      <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: transparent; -fx-background-color: transparent;" BorderPane.alignment="CENTER">
+         <StackPane fx:id="contentArea" styleClass="content-area" />
+      </ScrollPane>
    </center>
    <bottom>
       <HBox prefHeight="32.0" prefWidth="200.0" style="-fx-background-color: #06121C; -fx-padding: 6 24 6 24; -fx-border-color: -hex-border-soft; -fx-border-width: 1 0 0 0;" BorderPane.alignment="CENTER_RIGHT">

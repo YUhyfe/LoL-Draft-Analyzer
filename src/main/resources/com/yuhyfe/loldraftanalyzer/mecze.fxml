@@ -7,46 +7,40 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <!--
-  mecze.fxml — szczegółowa historia rozgrywek z filtrami i statystykami okresu.
+  mecze.fxml — historia meczów gracza z filtrami.
 -->
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.yuhyfe.loldraftanalyzer.controller.MeczeController"
       stylesheets="@styles.css"
       styleClass="content-area"
-      spacing="20"
-      prefWidth="1840"
-      prefHeight="980"
-      maxWidth="1700">
-    <padding>
-        <Insets top="8" right="0" bottom="8" left="0"/>
-    </padding>
+      spacing="20">
 
     <!-- HEADER -->
-    <HBox spacing="20" alignment="CENTER_LEFT">
+    <HBox spacing="16" alignment="CENTER_LEFT">
         <Label text="Historia meczów" styleClass="page-title"/>
-        <Label text="247 meczów  ·  ostatnie 30 dni" styleClass="text-muted text-sm"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <TextField promptText="Filtruj po nicku / czempionie..." styleClass="search-field" prefWidth="320"/>
+        <Button onAction="#handleRefresh" styleClass="btn-ghost" text="↻ Odśwież"/>
     </HBox>
 
     <!-- FILTERS -->
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <Button text="Wszystkie" styleClass="filter-chip active"/>
-        <Button text="Solo/Duo" styleClass="filter-chip"/>
-        <Button text="Flex" styleClass="filter-chip"/>
-        <Button text="Normal" styleClass="filter-chip"/>
-        <Button text="ARAM" styleClass="filter-chip"/>
-        <Button text="Clash" styleClass="filter-chip"/>
+        <Button fx:id="btnAll" onAction="#handleAll" text="Wszystkie">
+            <styleClass><String fx:value="filter-chip"/><String fx:value="active"/></styleClass>
+        </Button>
+        <Button fx:id="btnSolo"   onAction="#handleSolo"   text="Solo/Duo"   styleClass="filter-chip"/>
+        <Button fx:id="btnFlex"   onAction="#handleFlex"   text="Flex"       styleClass="filter-chip"/>
+        <Button fx:id="btnNormal" onAction="#handleNormal" text="Normal"     styleClass="filter-chip"/>
+        <Button fx:id="btnAram"   onAction="#handleAram"   text="ARAM"       styleClass="filter-chip"/>
         <Region HBox.hgrow="ALWAYS"/>
         <Label text="Wynik:" styleClass="text-muted text-sm"/>
-        <ComboBox prefWidth="140" value="Wszystkie">
+        <ComboBox fx:id="resultCombo" prefWidth="160">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Wszystkie"/>
@@ -55,523 +49,47 @@
                 </FXCollections>
             </items>
         </ComboBox>
-        <Label text="Okres:" styleClass="text-muted text-sm"/>
-        <ComboBox prefWidth="160" value="Ostatnie 30 dni">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Dzisiaj"/>
-                    <String fx:value="Ostatnie 7 dni"/>
-                    <String fx:value="Ostatnie 30 dni"/>
-                    <String fx:value="Bieżący sezon"/>
-                    <String fx:value="Wszystkie"/>
-                </FXCollections>
-            </items>
-        </ComboBox>
     </HBox>
 
     <!-- KPI STRIP -->
     <HBox spacing="16">
         <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-            <Label text="148W / 99L" styleClass="kpi-value kpi-value-success"/>
-            <Label text="BILANS OKRESU" styleClass="kpi-label"/>
+            <Label fx:id="kpiRecord" text="—" styleClass="kpi-value"/>
+            <Label text="BILANS" styleClass="kpi-label"/>
         </VBox>
         <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-            <Label text="59.9%" styleClass="kpi-value kpi-value-success"/>
+            <Label fx:id="kpiWr" text="—" styleClass="kpi-value"/>
             <Label text="WIN RATE" styleClass="kpi-label"/>
         </VBox>
         <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-            <Label text="4.12" styleClass="kpi-value"/>
+            <Label fx:id="kpiKda" text="—" styleClass="kpi-value"/>
             <Label text="ŚREDNIE KDA" styleClass="kpi-label"/>
         </VBox>
         <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-            <Label text="28:34" styleClass="kpi-value kpi-value-info"/>
+            <Label fx:id="kpiAvgTime" text="—" styleClass="kpi-value kpi-value-info"/>
             <Label text="ŚREDNI CZAS GRY" styleClass="kpi-label"/>
-        </VBox>
-        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-            <Label text="+142" styleClass="kpi-value kpi-value-success"/>
-            <Label text="LP NETTO" styleClass="kpi-label"/>
         </VBox>
     </HBox>
 
     <!-- MATCH LIST -->
     <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
-                minHeight="0" prefViewportHeight="0"
+                minHeight="0"
                 hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
                 style="-fx-background: transparent; -fx-background-color: transparent;">
-        <VBox spacing="12">
-
-            <!-- MATCH 1: WIN Yasuo -->
-            <HBox styleClass="match-detail-row match-detail-row-win" spacing="20" alignment="CENTER_LEFT">
-                <VBox alignment="CENTER" spacing="6" prefWidth="70">
-                    <Label text="WIN" styleClass="win-chip"/>
-                    <Label text="Solo/Duo" styleClass="queue-chip"/>
-                </VBox>
-                <Region prefWidth="64" prefHeight="64" minWidth="64" minHeight="64" maxWidth="64" maxHeight="64"
-                        style="-fx-background-color: #14253F; -fx-background-radius: 12; -fx-border-color: #C8AA6E; -fx-border-width: 2; -fx-border-radius: 12;"/>
-                <VBox HBox.hgrow="ALWAYS" spacing="4" prefWidth="200">
-                    <Label text="Yasuo" styleClass="text-bold text-gold text-lg"/>
-                    <Label text="Mid Lane  ·  28 min temu" styleClass="text-muted text-sm"/>
-                    <Label text="Summoner's Rift" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox alignment="CENTER" spacing="4" prefWidth="140">
-                    <Label text="12 / 4 / 8" styleClass="text-bold text-lg"/>
-                    <Label text="KDA 5.00" styleClass="text-success text-sm text-bold"/>
-                    <Label text="219 CS  ·  7.8/min" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox spacing="6" alignment="CENTER_LEFT">
-                    <HBox spacing="4">
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region prefWidth="6"/>
-                        <Region styleClass="item-slot item-slot-trinket"/>
-                    </HBox>
-                    <HBox spacing="6" alignment="CENTER_LEFT">
-                        <Label text="CONQUEROR" styleClass="queue-chip"/>
-                        <Label text="PRECISION + RESOLVE" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-                <VBox spacing="3" alignment="CENTER">
-                    <Label text="Sojusznicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait team-mini-portrait-self"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                    <Label text="Przeciwnicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                </VBox>
-                <VBox alignment="CENTER_RIGHT" spacing="4" prefWidth="90">
-                    <Label text="28:14" styleClass="text-muted"/>
-                    <Label text="+22 LP" styleClass="text-success text-bold text-lg"/>
-                    <Label text="Diamond IV" styleClass="text-muted text-sm"/>
-                </VBox>
-            </HBox>
-
-            <!-- MATCH 2: LOSS Ahri -->
-            <HBox styleClass="match-detail-row match-detail-row-loss" spacing="20" alignment="CENTER_LEFT">
-                <VBox alignment="CENTER" spacing="6" prefWidth="70">
-                    <Label text="LOSS" styleClass="loss-chip"/>
-                    <Label text="Solo/Duo" styleClass="queue-chip"/>
-                </VBox>
-                <Region prefWidth="64" prefHeight="64" minWidth="64" minHeight="64" maxWidth="64" maxHeight="64"
-                        style="-fx-background-color: #14253F; -fx-background-radius: 12; -fx-border-color: #C8232C; -fx-border-width: 2; -fx-border-radius: 12;"/>
-                <VBox HBox.hgrow="ALWAYS" spacing="4" prefWidth="200">
-                    <Label text="Ahri" styleClass="text-bold text-gold text-lg"/>
-                    <Label text="Mid Lane  ·  1 godz. temu" styleClass="text-muted text-sm"/>
-                    <Label text="Summoner's Rift" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox alignment="CENTER" spacing="4" prefWidth="140">
-                    <Label text="6 / 9 / 4" styleClass="text-bold text-lg"/>
-                    <Label text="KDA 1.11" styleClass="text-danger text-sm text-bold"/>
-                    <Label text="187 CS  ·  5.7/min" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox spacing="6" alignment="CENTER_LEFT">
-                    <HBox spacing="4">
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot"/>
-                        <Region prefWidth="6"/>
-                        <Region styleClass="item-slot item-slot-trinket"/>
-                    </HBox>
-                    <HBox spacing="6" alignment="CENTER_LEFT">
-                        <Label text="ELECTROCUTE" styleClass="queue-chip"/>
-                        <Label text="DOMINATION + SORCERY" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-                <VBox spacing="3" alignment="CENTER">
-                    <Label text="Sojusznicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait team-mini-portrait-self"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                    <Label text="Przeciwnicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                </VBox>
-                <VBox alignment="CENTER_RIGHT" spacing="4" prefWidth="90">
-                    <Label text="32:47" styleClass="text-muted"/>
-                    <Label text="-18 LP" styleClass="text-danger text-bold text-lg"/>
-                    <Label text="Diamond IV" styleClass="text-muted text-sm"/>
-                </VBox>
-            </HBox>
-
-            <!-- MATCH 3: WIN Akali Flex -->
-            <HBox styleClass="match-detail-row match-detail-row-win" spacing="20" alignment="CENTER_LEFT">
-                <VBox alignment="CENTER" spacing="6" prefWidth="70">
-                    <Label text="WIN" styleClass="win-chip"/>
-                    <Label text="Flex" styleClass="queue-chip"/>
-                </VBox>
-                <Region prefWidth="64" prefHeight="64" minWidth="64" minHeight="64" maxWidth="64" maxHeight="64"
-                        style="-fx-background-color: #14253F; -fx-background-radius: 12; -fx-border-color: #C8AA6E; -fx-border-width: 2; -fx-border-radius: 12;"/>
-                <VBox HBox.hgrow="ALWAYS" spacing="4" prefWidth="200">
-                    <Label text="Akali" styleClass="text-bold text-gold text-lg"/>
-                    <Label text="Mid Lane  ·  3 godz. temu" styleClass="text-muted text-sm"/>
-                    <Label text="Summoner's Rift" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox alignment="CENTER" spacing="4" prefWidth="140">
-                    <Label text="14 / 3 / 6" styleClass="text-bold text-lg"/>
-                    <Label text="KDA 6.67" styleClass="text-success text-sm text-bold"/>
-                    <Label text="194 CS  ·  8.1/min" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox spacing="6" alignment="CENTER_LEFT">
-                    <HBox spacing="4">
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region prefWidth="6"/>
-                        <Region styleClass="item-slot item-slot-trinket"/>
-                    </HBox>
-                    <HBox spacing="6" alignment="CENTER_LEFT">
-                        <Label text="ELECTROCUTE" styleClass="queue-chip"/>
-                        <Label text="DOMINATION + INSPIRATION" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-                <VBox spacing="3" alignment="CENTER">
-                    <Label text="Sojusznicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait team-mini-portrait-self"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                    <Label text="Przeciwnicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                </VBox>
-                <VBox alignment="CENTER_RIGHT" spacing="4" prefWidth="90">
-                    <Label text="24:08" styleClass="text-muted"/>
-                    <Label text="+19 LP" styleClass="text-success text-bold text-lg"/>
-                    <Label text="Diamond IV" styleClass="text-muted text-sm"/>
-                </VBox>
-            </HBox>
-
-            <!-- MATCH 4: WIN Sylas -->
-            <HBox styleClass="match-detail-row match-detail-row-win" spacing="20" alignment="CENTER_LEFT">
-                <VBox alignment="CENTER" spacing="6" prefWidth="70">
-                    <Label text="WIN" styleClass="win-chip"/>
-                    <Label text="Solo/Duo" styleClass="queue-chip"/>
-                </VBox>
-                <Region prefWidth="64" prefHeight="64" minWidth="64" minHeight="64" maxWidth="64" maxHeight="64"
-                        style="-fx-background-color: #14253F; -fx-background-radius: 12; -fx-border-color: #C8AA6E; -fx-border-width: 2; -fx-border-radius: 12;"/>
-                <VBox HBox.hgrow="ALWAYS" spacing="4" prefWidth="200">
-                    <Label text="Sylas" styleClass="text-bold text-gold text-lg"/>
-                    <Label text="Mid Lane  ·  5 godz. temu" styleClass="text-muted text-sm"/>
-                    <Label text="Summoner's Rift" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox alignment="CENTER" spacing="4" prefWidth="140">
-                    <Label text="9 / 5 / 11" styleClass="text-bold text-lg"/>
-                    <Label text="KDA 4.00" styleClass="text-success text-sm text-bold"/>
-                    <Label text="206 CS  ·  6.6/min" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox spacing="6" alignment="CENTER_LEFT">
-                    <HBox spacing="4">
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region prefWidth="6"/>
-                        <Region styleClass="item-slot item-slot-trinket"/>
-                    </HBox>
-                    <HBox spacing="6" alignment="CENTER_LEFT">
-                        <Label text="CONQUEROR" styleClass="queue-chip"/>
-                        <Label text="PRECISION + DOMINATION" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-                <VBox spacing="3" alignment="CENTER">
-                    <Label text="Sojusznicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait team-mini-portrait-self"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                    <Label text="Przeciwnicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                </VBox>
-                <VBox alignment="CENTER_RIGHT" spacing="4" prefWidth="90">
-                    <Label text="31:22" styleClass="text-muted"/>
-                    <Label text="+19 LP" styleClass="text-success text-bold text-lg"/>
-                    <Label text="Diamond IV" styleClass="text-muted text-sm"/>
-                </VBox>
-            </HBox>
-
-            <!-- MATCH 5: LOSS Zed -->
-            <HBox styleClass="match-detail-row match-detail-row-loss" spacing="20" alignment="CENTER_LEFT">
-                <VBox alignment="CENTER" spacing="6" prefWidth="70">
-                    <Label text="LOSS" styleClass="loss-chip"/>
-                    <Label text="Solo/Duo" styleClass="queue-chip"/>
-                </VBox>
-                <Region prefWidth="64" prefHeight="64" minWidth="64" minHeight="64" maxWidth="64" maxHeight="64"
-                        style="-fx-background-color: #14253F; -fx-background-radius: 12; -fx-border-color: #C8232C; -fx-border-width: 2; -fx-border-radius: 12;"/>
-                <VBox HBox.hgrow="ALWAYS" spacing="4" prefWidth="200">
-                    <Label text="Zed" styleClass="text-bold text-gold text-lg"/>
-                    <Label text="Mid Lane  ·  wczoraj" styleClass="text-muted text-sm"/>
-                    <Label text="Summoner's Rift" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox alignment="CENTER" spacing="4" prefWidth="140">
-                    <Label text="4 / 8 / 2" styleClass="text-bold text-lg"/>
-                    <Label text="KDA 0.75" styleClass="text-danger text-sm text-bold"/>
-                    <Label text="148 CS  ·  6.7/min" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox spacing="6" alignment="CENTER_LEFT">
-                    <HBox spacing="4">
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot"/>
-                        <Region styleClass="item-slot"/>
-                        <Region prefWidth="6"/>
-                        <Region styleClass="item-slot item-slot-trinket"/>
-                    </HBox>
-                    <HBox spacing="6" alignment="CENTER_LEFT">
-                        <Label text="ELECTROCUTE" styleClass="queue-chip"/>
-                        <Label text="DOMINATION + PRECISION" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-                <VBox spacing="3" alignment="CENTER">
-                    <Label text="Sojusznicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait team-mini-portrait-self"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                    <Label text="Przeciwnicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                </VBox>
-                <VBox alignment="CENTER_RIGHT" spacing="4" prefWidth="90">
-                    <Label text="22:18" styleClass="text-muted"/>
-                    <Label text="-21 LP" styleClass="text-danger text-bold text-lg"/>
-                    <Label text="Diamond IV" styleClass="text-muted text-sm"/>
-                </VBox>
-            </HBox>
-
-            <!-- MATCH 6: WIN Ekko -->
-            <HBox styleClass="match-detail-row match-detail-row-win" spacing="20" alignment="CENTER_LEFT">
-                <VBox alignment="CENTER" spacing="6" prefWidth="70">
-                    <Label text="WIN" styleClass="win-chip"/>
-                    <Label text="Solo/Duo" styleClass="queue-chip"/>
-                </VBox>
-                <Region prefWidth="64" prefHeight="64" minWidth="64" minHeight="64" maxWidth="64" maxHeight="64"
-                        style="-fx-background-color: #14253F; -fx-background-radius: 12; -fx-border-color: #C8AA6E; -fx-border-width: 2; -fx-border-radius: 12;"/>
-                <VBox HBox.hgrow="ALWAYS" spacing="4" prefWidth="200">
-                    <Label text="Ekko" styleClass="text-bold text-gold text-lg"/>
-                    <Label text="Mid Lane  ·  wczoraj" styleClass="text-muted text-sm"/>
-                    <Label text="Summoner's Rift" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox alignment="CENTER" spacing="4" prefWidth="140">
-                    <Label text="11 / 2 / 14" styleClass="text-bold text-lg"/>
-                    <Label text="KDA 12.50" styleClass="text-success text-sm text-bold"/>
-                    <Label text="234 CS  ·  7.8/min" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox spacing="6" alignment="CENTER_LEFT">
-                    <HBox spacing="4">
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region prefWidth="6"/>
-                        <Region styleClass="item-slot item-slot-trinket"/>
-                    </HBox>
-                    <HBox spacing="6" alignment="CENTER_LEFT">
-                        <Label text="ARCANE COMET" styleClass="queue-chip"/>
-                        <Label text="SORCERY + INSPIRATION" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-                <VBox spacing="3" alignment="CENTER">
-                    <Label text="Sojusznicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait team-mini-portrait-self"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                    <Label text="Przeciwnicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                </VBox>
-                <VBox alignment="CENTER_RIGHT" spacing="4" prefWidth="90">
-                    <Label text="29:51" styleClass="text-muted"/>
-                    <Label text="+24 LP" styleClass="text-success text-bold text-lg"/>
-                    <Label text="Diamond IV" styleClass="text-muted text-sm"/>
-                </VBox>
-            </HBox>
-
-            <!-- MATCH 7: LOSS Vex ARAM -->
-            <HBox styleClass="match-detail-row match-detail-row-loss" spacing="20" alignment="CENTER_LEFT">
-                <VBox alignment="CENTER" spacing="6" prefWidth="70">
-                    <Label text="LOSS" styleClass="loss-chip"/>
-                    <Label text="ARAM" styleClass="queue-chip"/>
-                </VBox>
-                <Region prefWidth="64" prefHeight="64" minWidth="64" minHeight="64" maxWidth="64" maxHeight="64"
-                        style="-fx-background-color: #14253F; -fx-background-radius: 12; -fx-border-color: #C8232C; -fx-border-width: 2; -fx-border-radius: 12;"/>
-                <VBox HBox.hgrow="ALWAYS" spacing="4" prefWidth="200">
-                    <Label text="Vex" styleClass="text-bold text-gold text-lg"/>
-                    <Label text="ARAM  ·  2 dni temu" styleClass="text-muted text-sm"/>
-                    <Label text="Howling Abyss" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox alignment="CENTER" spacing="4" prefWidth="140">
-                    <Label text="3 / 7 / 5" styleClass="text-bold text-lg"/>
-                    <Label text="KDA 1.14" styleClass="text-danger text-sm text-bold"/>
-                    <Label text="84 CS  ·  3.1/min" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox spacing="6" alignment="CENTER_LEFT">
-                    <HBox spacing="4">
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot"/>
-                        <Region prefWidth="6"/>
-                        <Region styleClass="item-slot item-slot-trinket"/>
-                    </HBox>
-                    <HBox spacing="6" alignment="CENTER_LEFT">
-                        <Label text="DARK HARVEST" styleClass="queue-chip"/>
-                        <Label text="DOMINATION + RESOLVE" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-                <VBox spacing="3" alignment="CENTER">
-                    <Label text="Sojusznicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait team-mini-portrait-self"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                    <Label text="Przeciwnicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                </VBox>
-                <VBox alignment="CENTER_RIGHT" spacing="4" prefWidth="90">
-                    <Label text="18:42" styleClass="text-muted"/>
-                    <Label text="—" styleClass="text-muted text-bold text-lg"/>
-                    <Label text="ARAM" styleClass="text-muted text-sm"/>
-                </VBox>
-            </HBox>
-
-            <!-- MATCH 8: WIN Yone Flex -->
-            <HBox styleClass="match-detail-row match-detail-row-win" spacing="20" alignment="CENTER_LEFT">
-                <VBox alignment="CENTER" spacing="6" prefWidth="70">
-                    <Label text="WIN" styleClass="win-chip"/>
-                    <Label text="Flex" styleClass="queue-chip"/>
-                </VBox>
-                <Region prefWidth="64" prefHeight="64" minWidth="64" minHeight="64" maxWidth="64" maxHeight="64"
-                        style="-fx-background-color: #14253F; -fx-background-radius: 12; -fx-border-color: #C8AA6E; -fx-border-width: 2; -fx-border-radius: 12;"/>
-                <VBox HBox.hgrow="ALWAYS" spacing="4" prefWidth="200">
-                    <Label text="Yone" styleClass="text-bold text-gold text-lg"/>
-                    <Label text="Mid Lane  ·  2 dni temu" styleClass="text-muted text-sm"/>
-                    <Label text="Summoner's Rift" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox alignment="CENTER" spacing="4" prefWidth="140">
-                    <Label text="8 / 4 / 12" styleClass="text-bold text-lg"/>
-                    <Label text="KDA 5.00" styleClass="text-success text-sm text-bold"/>
-                    <Label text="221 CS  ·  6.7/min" styleClass="text-muted text-sm"/>
-                </VBox>
-                <VBox spacing="6" alignment="CENTER_LEFT">
-                    <HBox spacing="4">
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region styleClass="item-slot item-slot-filled"/>
-                        <Region prefWidth="6"/>
-                        <Region styleClass="item-slot item-slot-trinket"/>
-                    </HBox>
-                    <HBox spacing="6" alignment="CENTER_LEFT">
-                        <Label text="CONQUEROR" styleClass="queue-chip"/>
-                        <Label text="PRECISION + RESOLVE" styleClass="text-muted text-sm"/>
-                    </HBox>
-                </VBox>
-                <VBox spacing="3" alignment="CENTER">
-                    <Label text="Sojusznicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait team-mini-portrait-self"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                    <Label text="Przeciwnicy" styleClass="text-muted text-sm"/>
-                    <HBox spacing="3">
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                        <Region styleClass="team-mini-portrait"/>
-                    </HBox>
-                </VBox>
-                <VBox alignment="CENTER_RIGHT" spacing="4" prefWidth="90">
-                    <Label text="33:15" styleClass="text-muted"/>
-                    <Label text="+16 LP" styleClass="text-success text-bold text-lg"/>
-                    <Label text="Platinum II" styleClass="text-muted text-sm"/>
-                </VBox>
-            </HBox>
-
+        <VBox fx:id="matchListContainer" spacing="10">
+            <padding><Insets top="4" bottom="4"/></padding>
         </VBox>
     </ScrollPane>
+
+    <!-- STATUS BAR -->
+    <HBox prefHeight="32"
+          style="-fx-background-color: #06121C; -fx-padding: 6 24 6 24; -fx-border-color: -hex-border-soft; -fx-border-width: 1 0 0 0;">
+        <Label fx:id="statusLabel" text="ładowanie...">
+            <styleClass>
+                <String fx:value="text-muted"/>
+                <String fx:value="text-sm"/>
+            </styleClass>
+        </Label>
+    </HBox>
+
 </VBox>
