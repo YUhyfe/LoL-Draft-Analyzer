@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+  champions.fxml — statystyki gracza per bohater z ostatnich 100 meczów.
+  Root: VBox. Wkładany do StackPane content-area w view.fxml przez MainController.
+-->
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.yuhyfe.loldraftanalyzer.controller.ChampionsController"
+      stylesheets="@styles.css"
+      styleClass="content-area"
+      spacing="20">
+
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+    <HBox spacing="16" alignment="CENTER_LEFT">
+        <Label text="Twoi Bohaterowie" styleClass="page-title"/>
+        <Label text="Statystyki z ostatnich 100 meczów" styleClass="text-muted text-sm"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#handleRefresh" styleClass="btn-ghost" text="↻ Odśwież"/>
+        <TextField fx:id="searchField" promptText="Szukaj postaci..." styleClass="search-field" prefWidth="240"/>
+    </HBox>
+
+    <!-- =========================================================
+         FILTERS
+         ========================================================= -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button fx:id="filterAll" text="Wszystkie" onAction="#handleFilterAll">
+            <styleClass><String fx:value="filter-chip"/><String fx:value="active"/></styleClass>
+        </Button>
+        <Button fx:id="filterTop"     text="TOP"       styleClass="filter-chip"/>
+        <Button fx:id="filterJungle"  text="JUNGLE"    styleClass="filter-chip"/>
+        <Button fx:id="filterMid"     text="MID"       styleClass="filter-chip"/>
+        <Button fx:id="filterAdc"     text="ADC"       styleClass="filter-chip"/>
+        <Button fx:id="filterSupport" text="SUPPORT"   styleClass="filter-chip"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Sortuj:" styleClass="text-muted text-sm"/>
+        <ComboBox fx:id="sortCombo" prefWidth="180">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Gry (malejąco)"/>
+                    <String fx:value="Winrate (malejąco)"/>
+                    <String fx:value="KDA (malejąco)"/>
+                    <String fx:value="Alfabetycznie"/>
+                </FXCollections>
+            </items>
+            <value><String fx:value="Gry (malejąco)"/></value>
+        </ComboBox>
+    </HBox>
+
+    <!-- =========================================================
+         KPI STRIP
+         ========================================================= -->
+    <HBox spacing="16">
+        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="kpiPlayed" styleClass="kpi-value kpi-value-info" text="—"/>
+            <Label styleClass="kpi-label" text="UNIKALNYCH POSTACI"/>
+        </VBox>
+        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="kpiTopChamp" styleClass="kpi-value kpi-value-warn" text="—"/>
+            <Label styleClass="kpi-label" text="ULUBIONA POSTAĆ"/>
+        </VBox>
+        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="kpiTopRole" styleClass="kpi-value kpi-value-success" text="—"/>
+            <Label styleClass="kpi-label" text="GŁÓWNA ROLA"/>
+        </VBox>
+        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="kpiOverallWr" styleClass="kpi-value" text="—"/>
+            <Label styleClass="kpi-label" text="OGÓLNY WINRATE"/>
+        </VBox>
+    </HBox>
+
+    <!-- =========================================================
+         CHAMPIONS GRID
+         ========================================================= -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                minHeight="0" prefViewportHeight="0"
+                hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                style="-fx-background: transparent; -fx-background-color: transparent;">
+        <FlowPane fx:id="champGrid" hgap="16" vgap="16"
+                  alignment="TOP_LEFT" rowValignment="TOP">
+            <padding>
+                <Insets bottom="8"/>
+            </padding>
+        </FlowPane>
+    </ScrollPane>
+
+    <!-- STATUS BAR -->
+    <HBox prefHeight="32.0" style="-fx-background-color: #06121C; -fx-padding: 6 24 6 24; -fx-border-color: -hex-border-soft; -fx-border-width: 1 0 0 0;">
+        <Label fx:id="statusLabel" text="v0.1.0 · ładowanie...">
+            <styleClass>
+                <String fx:value="text-muted"/>
+                <String fx:value="text-sm"/>
+            </styleClass>
+        </Label>
+    </HBox>
+
+</VBox>

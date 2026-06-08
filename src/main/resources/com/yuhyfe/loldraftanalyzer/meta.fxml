@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+  meta.fxml — przegląd metagry na podstawie historii meczów gracza.
+  Root: VBox. Wkładany do StackPane content-area w view.fxml przez MainController.
+-->
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.yuhyfe.loldraftanalyzer.controller.MetaController"
+      stylesheets="@styles.css"
+      styleClass="content-area"
+      spacing="24">
+
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+    <HBox spacing="16" alignment="CENTER_LEFT">
+        <Label text="Przegląd metagry" styleClass="page-title"/>
+        <Label text="Dane z losowych graczy na serwerze EUNE" styleClass="text-muted text-sm"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#handleRefresh" styleClass="btn-ghost" text="↻ Odśwież"/>
+    </HBox>
+
+    <!-- =========================================================
+         CACHE INFO STRIP
+         ========================================================= -->
+    <HBox spacing="24" alignment="CENTER_LEFT"
+          style="-fx-background-color: rgba(255,255,255,0.03); -fx-padding: 8 16 8 16; -fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: -hex-border-soft; -fx-border-width: 1;">
+        <Label fx:id="cacheInfoLabel" styleClass="text-muted text-sm" text="Cache: ładowanie…"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="dataSourceLabel" styleClass="text-muted text-sm" text=""/>
+    </HBox>
+
+    <!-- =========================================================
+         KPI STRIP
+         ========================================================= -->
+    <HBox spacing="16">
+        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="kpiGames" styleClass="kpi-value kpi-value-info" text="—"/>
+            <Label styleClass="kpi-label" text="PRZEANALIZOWANYCH MECZÓW"/>
+        </VBox>
+        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="kpiPatch" styleClass="kpi-value kpi-value-warn" text="—"/>
+            <Label styleClass="kpi-label" text="WERSJA PATCHA"/>
+        </VBox>
+        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="kpiTopPick" styleClass="kpi-value kpi-value-success" text="—"/>
+            <Label styleClass="kpi-label" text="NAJPOPULARNIEJSZY PICK"/>
+        </VBox>
+        <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="kpiTopBan" styleClass="kpi-value" text="—"/>
+            <Label styleClass="kpi-label" text="NAJCZĘŚCIEJ BANOWANY"/>
+        </VBox>
+    </HBox>
+
+    <!-- =========================================================
+         3 LISTY
+         ========================================================= -->
+    <HBox spacing="24" VBox.vgrow="ALWAYS">
+
+        <!-- POPULARNE PICKI -->
+        <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="12">
+            <Label text="Popularne picki" styleClass="section-title"/>
+            <Label text="Ile razy dany bohater był wybrany (10 graczy × mecz)" styleClass="text-muted text-sm"/>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        minHeight="0" prefViewportHeight="400"
+                        hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                        style="-fx-background: transparent; -fx-background-color: transparent;">
+                <VBox fx:id="pickList" spacing="12">
+                    <padding><Insets top="4" bottom="4"/></padding>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+
+        <!-- NAJCZĘŚCIEJ BANOWANE -->
+        <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="12">
+            <Label text="Najczęściej banowane" styleClass="section-title"/>
+            <Label text="Procent meczów w których bohater był zbanowany" styleClass="text-muted text-sm"/>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        minHeight="0" prefViewportHeight="400"
+                        hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                        style="-fx-background: transparent; -fx-background-color: transparent;">
+                <VBox fx:id="banList" spacing="12">
+                    <padding><Insets top="4" bottom="4"/></padding>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+
+        <!-- NAJWYŻSZY WR -->
+        <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="12">
+            <Label text="Najwyższy winrate" styleClass="section-title"/>
+            <Label text="Postaci z min. 5 wystąpieniami, ze wszystkich 10 graczy" styleClass="text-muted text-sm"/>
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        minHeight="0" prefViewportHeight="400"
+                        hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                        style="-fx-background: transparent; -fx-background-color: transparent;">
+                <VBox fx:id="wrList" spacing="12">
+                    <padding><Insets top="4" bottom="4"/></padding>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+
+    </HBox>
+
+    <!-- STATUS BAR -->
+    <HBox prefHeight="32.0" style="-fx-background-color: #06121C; -fx-padding: 6 24 6 24; -fx-border-color: -hex-border-soft; -fx-border-width: 1 0 0 0;">
+        <Label fx:id="statusLabel" text="v0.1.0 · ładowanie...">
+            <styleClass>
+                <String fx:value="text-muted"/>
+                <String fx:value="text-sm"/>
+            </styleClass>
+        </Label>
+    </HBox>
+
+</VBox>

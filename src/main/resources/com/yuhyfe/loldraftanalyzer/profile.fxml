@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+  profile.fxml — widok profilu gracza
+  Root: VBox. Wkładany do StackPane (.content-area) w view.fxml przez MainController.
+-->
+
+<VBox spacing="24.0" styleClass="content-area" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.yuhyfe.loldraftanalyzer.controller.ProfileController">
+   <children>
+               
+                         <!-- =========================================================
+                        HERO CARD
+                              ========================================================= -->
+                   <HBox alignment="CENTER_LEFT" spacing="28" styleClass="hero-card">
+                       <StackPane maxHeight="120" maxWidth="120" minHeight="120" minWidth="120" prefHeight="120" prefWidth="120" styleClass="avatar-circle">
+                           <ImageView fx:id="avatarImage" fitHeight="116" fitWidth="116" preserveRatio="true" smooth="true" />
+                       </StackPane>
+               
+                             <VBox alignment="CENTER_LEFT" spacing="12" HBox.hgrow="ALWAYS">
+                           <HBox alignment="BASELINE_LEFT" spacing="14">
+                               <Label fx:id="summonerName" styleClass="summoner-name" text="—" />
+                               <Label fx:id="summonerTag" styleClass="summoner-tag" text="" />
+                           </HBox>
+                           <HBox alignment="CENTER_LEFT" spacing="10">
+                               <Label fx:id="levelChip" styleClass="chip-gold" text="LVL —" />
+                               <Label fx:id="rankChip" styleClass="chip" text="—" />
+                               <Label fx:id="mainRoleChip" styleClass="chip-gold" text="—" />
+                               <Label fx:id="platformChip" styleClass="chip" text="—" />
+                           </HBox>
+                       </VBox>
+               
+                             <VBox alignment="CENTER_RIGHT" spacing="10">
+                           <Button onAction="#handleRefresh" styleClass="btn-primary" text="↻ Odśwież profil" />
+                           <Label fx:id="lastUpdateLabel" styleClass="text-muted text-sm" text="—" />
+                       </VBox>
+                   </HBox>
+               
+                      <!-- =========================================================
+                        RANK CARDS — Solo/Duo + Flex
+                           ========================================================= -->
+                   <HBox alignment="CENTER_LEFT" spacing="24">
+                       <VBox spacing="12" styleClass="rank-card" HBox.hgrow="ALWAYS">
+                           <Label styleClass="rank-queue" text="RANKED SOLO/DUO" />
+                           <HBox alignment="CENTER_LEFT" spacing="18">
+                               <ImageView fx:id="soloEmblem" fitHeight="68" fitWidth="68" preserveRatio="false" smooth="true" />
+                               <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                   <Label fx:id="soloTier" styleClass="rank-tier" text="—" />
+                                   <Label fx:id="soloLp" styleClass="rank-lp" text="—" />
+                                   <Label fx:id="soloStats" styleClass="text-muted text-sm" text="" />
+                               </VBox>
+                           </HBox>
+                       </VBox>
+               
+                          <VBox spacing="12" styleClass="rank-card" HBox.hgrow="ALWAYS">
+                           <Label styleClass="rank-queue" text="RANKED FLEX" />
+                           <HBox alignment="CENTER_LEFT" spacing="18">
+                               <ImageView fx:id="flexEmblem" fitHeight="68" fitWidth="68" preserveRatio="false" smooth="true" />
+                               <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                   <Label fx:id="flexTier" styleClass="rank-tier" text="—" />
+                                   <Label fx:id="flexLp" styleClass="rank-lp" text="—" />
+                                   <Label fx:id="flexStats" styleClass="text-muted text-sm" text="" />
+                               </VBox>
+                           </HBox>
+                       </VBox>
+                   </HBox>
+               
+                      <!-- =========================================================
+                        KPI ROW
+                           ========================================================= -->
+                   <HBox spacing="16">
+                       <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                           <Label fx:id="kpiWinRate" styleClass="kpi-value kpi-value-success" text="—" />
+                           <Label styleClass="kpi-label" text="WIN RATE — SOLO Q" />
+                       </VBox>
+                       <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                           <Label fx:id="kpiKda" styleClass="kpi-value" text="—" />
+                           <Label styleClass="kpi-label" text="ŚREDNIE KDA" />
+                       </VBox>
+                       <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                           <Label fx:id="kpiGames" styleClass="kpi-value kpi-value-info" text="—" />
+                           <Label styleClass="kpi-label" text="ROZEGRANE GRY" />
+                       </VBox>
+                       <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                           <Label fx:id="kpiRole" styleClass="kpi-value kpi-value-warn" text="—" />
+                           <Label styleClass="kpi-label" text="GŁÓWNA ROLA" />
+                       </VBox>
+                   </HBox>
+               
+                                        <!-- =========================================================
+                        TWO COLUMNS: matches + champion pool
+                                             ========================================================= -->
+                   <HBox alignment="TOP_LEFT" fillHeight="true" spacing="24">
+               
+                                            <!-- LEFT: ostatnie mecze -->
+                       <VBox spacing="12" styleClass="card" HBox.hgrow="ALWAYS">
+                           <HBox alignment="CENTER_LEFT" spacing="12">
+                               <Label maxWidth="Infinity" styleClass="section-title" text="Ostatnie mecze" HBox.hgrow="ALWAYS" />
+                               <Button styleClass="btn-ghost" text="Zobacz wszystkie" />
+                           </HBox>
+               
+                                                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" minHeight="0" prefViewportHeight="0" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
+                               <VBox fx:id="matchListContainer" spacing="10">
+                                   <!-- wypełniane przez ProfileController -->
+                               </VBox>
+                           </ScrollPane>
+                       </VBox>
+               
+                                            <!-- RIGHT: top postacie -->
+                       <VBox maxWidth="480" prefWidth="480" spacing="14" styleClass="card">
+                           <Label styleClass="section-title" text="Top postacie" />
+                           <VBox fx:id="topChampionsContainer" spacing="0">
+                               <!-- wypełniane przez ProfileController -->
+                           </VBox>
+                       </VBox>
+                   </HBox>
+
+                   <!-- Status bar -->
+                   <HBox prefHeight="32.0" style="-fx-background-color: #06121C; -fx-padding: 6 24 6 24; -fx-border-color: -hex-border-soft; -fx-border-width: 1 0 0 0;">
+                       <Label fx:id="statusLabel" text="v0.1.0 · LCU: łączenie...">
+                           <styleClass>
+                               <java.lang.String fx:value="text-muted" />
+                               <java.lang.String fx:value="text-sm" />
+                           </styleClass>
+                       </Label>
+                   </HBox>
+               </children>
+</VBox>

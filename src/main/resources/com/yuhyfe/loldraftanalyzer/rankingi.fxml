@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<!--
+  rankingi.fxml — leaderboard serwera (Riot API) lub własne statystyki (LCU).
+-->
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.yuhyfe.loldraftanalyzer.controller.RankingsController"
+      stylesheets="@styles.css"
+      styleClass="content-area"
+      spacing="20">
+
+    <!-- HEADER -->
+    <HBox spacing="16" alignment="CENTER_LEFT">
+        <Label text="Rankingi" styleClass="page-title"/>
+        <Label text="Dane z Riot API — Challenger / Grandmaster / Master" styleClass="text-muted text-sm"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#handleRefresh" styleClass="btn-ghost" text="↻ Odśwież"/>
+    </HBox>
+
+    <!-- FILTERS -->
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <Button fx:id="btnSolo" onAction="#handleSolo" text="Solo/Duo">
+            <styleClass><String fx:value="filter-chip"/><String fx:value="active"/></styleClass>
+        </Button>
+        <Button fx:id="btnFlex" onAction="#handleFlex" text="Flex 5v5" styleClass="filter-chip"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Tier:" styleClass="text-muted text-sm"/>
+        <ComboBox fx:id="tierCombo" prefWidth="160">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Challenger"/>
+                    <String fx:value="Grandmaster"/>
+                    <String fx:value="Master"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+    </HBox>
+
+    <!-- DYNAMIC CONTENT AREA -->
+    <VBox fx:id="contentArea" spacing="20" VBox.vgrow="ALWAYS"/>
+
+    <!-- STATUS BAR -->
+    <HBox prefHeight="32"
+          style="-fx-background-color: #06121C; -fx-padding: 6 24 6 24; -fx-border-color: -hex-border-soft; -fx-border-width: 1 0 0 0;">
+        <Label fx:id="statusLabel" text="ładowanie...">
+            <styleClass>
+                <String fx:value="text-muted"/>
+                <String fx:value="text-sm"/>
+            </styleClass>
+        </Label>
+    </HBox>
+
+</VBox>

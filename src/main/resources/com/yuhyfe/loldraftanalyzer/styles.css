@@ -1,0 +1,765 @@
+/* ============================================================
+   LoL Draft Analyzer — Hextech Gold design system
+   ============================================================ */
+
+.root {
+    /* ---- Paleta ---- */
+    -hex-bg:           #010A13;
+    -hex-bg-elev:      #06121C;
+    -hex-card:         #0A1428;
+    -hex-card-elev:    #0F1E33;
+    -hex-card-hover:   #14253F;
+    -hex-border:       #463714;
+    -hex-border-soft:  #1E2A3A;
+
+    -hex-gold:         #C8AA6E;
+    -hex-gold-bright:  #F0E6D2;
+    -hex-gold-deep:    #8E6B2C;
+
+    -hex-turquoise:    #0397AB;
+    -hex-turquoise-br: #00C8E6;
+
+    -hex-success:      #00F5D4;
+    -hex-warning:      #FBBF24;
+    -hex-danger:       #C8232C;
+    -hex-magenta:      #E94560;
+
+    -hex-text:         #F0E6D2;
+    -hex-text-muted:   #A09B8C;
+    -hex-text-dim:     #5B5A4F;
+
+    -fx-background-color: -hex-bg;
+    -fx-font-family: "Segoe UI", "Inter", "Helvetica Neue", sans-serif;
+    -fx-font-size: 13px;
+    -fx-text-fill: -hex-text;
+}
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+.top-bar {
+    -fx-background-color: linear-gradient(to bottom, #0A1428 0%, #061018 100%);
+    -fx-padding: 14 20 14 20;
+    -fx-spacing: 8;
+    -fx-alignment: CENTER_LEFT;
+    -fx-border-color: -hex-gold;
+    -fx-border-width: 0 0 1 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55), 16, 0, 0, 4);
+}
+
+.app-logo {
+    -fx-text-fill: -hex-gold;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 12 0 0;
+}
+
+.app-logo-accent {
+    -fx-text-fill: -hex-turquoise-br;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+/* ============================================================
+   NAV TABS (przyciski w top barze)
+   ============================================================ */
+.nav-tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: -hex-text-muted;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-padding: 8 14 8 14;
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-cursor: hand;
+}
+.nav-tab:hover {
+    -fx-background-color: rgba(200, 170, 110, 0.10);
+    -fx-text-fill: -hex-gold-bright;
+}
+.nav-tab.active {
+    -fx-background-color: linear-gradient(to bottom, #1A2E47, #0A1428);
+    -fx-text-fill: -hex-gold;
+    -fx-border-color: -hex-gold;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.35), 10, 0, 0, 0);
+}
+
+/* ============================================================
+   SEARCH FIELD
+   ============================================================ */
+.search-field {
+    -fx-background-color: #0A1428;
+    -fx-background-radius: 14;
+    -fx-border-color: -hex-border;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-text;
+    -fx-prompt-text-fill: -hex-text-muted;
+    -fx-padding: 8 16 8 16;
+    -fx-pref-width: 220;
+}
+.search-field:focused {
+    -fx-border-color: -hex-gold;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.35), 10, 0, 0, 0);
+}
+
+/* ============================================================
+   ICON BUTTONS (kółka w top barze)
+   ============================================================ */
+.icon-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 999;
+    -fx-text-fill: -hex-text-muted;
+    -fx-font-size: 16px;
+    -fx-padding: 8 12 8 12;
+    -fx-cursor: hand;
+    -fx-min-width: 38;
+    -fx-min-height: 38;
+}
+.icon-btn:hover {
+    -fx-background-color: rgba(200, 170, 110, 0.12);
+    -fx-text-fill: -hex-gold;
+}
+
+/* ============================================================
+   CONTENT AREA
+   ============================================================ */
+.content-area {
+    -fx-background-color: -hex-bg;
+    -fx-padding: 32 40 32 40;
+}
+
+.page-title {
+    -fx-text-fill: -hex-text;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.page-subtitle {
+    -fx-text-fill: -hex-text-muted;
+    -fx-font-size: 13px;
+}
+
+/* ============================================================
+   CARDS
+   ============================================================ */
+.card {
+    -fx-background-color: linear-gradient(to bottom, #0F1E33, #0A1428);
+    -fx-background-radius: 16;
+    -fx-border-color: -hex-border;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 18, 0, 0, 6);
+}
+
+.card-title {
+    -fx-text-fill: -hex-gold;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 12 0;
+}
+
+/* ============================================================
+   CHIPY / BADGE
+   ============================================================ */
+.chip {
+    -fx-background-color: rgba(3, 151, 171, 0.18);
+    -fx-background-radius: 999;
+    -fx-border-color: -hex-turquoise;
+    -fx-border-radius: 999;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-turquoise-br;
+    -fx-padding: 4 12 4 12;
+    -fx-font-size: 12px;
+}
+
+.chip-gold {
+    -fx-background-color: rgba(200, 170, 110, 0.15);
+    -fx-border-color: -hex-gold;
+    -fx-text-fill: -hex-gold;
+}
+
+/* ============================================================
+   PROGRESS BARS (winrate / popularity / banrate)
+   ============================================================ */
+.bar-track {
+    -fx-background-color: #06121C;
+    -fx-background-radius: 999;
+    -fx-min-height: 6;
+    -fx-pref-height: 6;
+    -fx-max-height: 6;
+}
+.bar-fill-success {
+    -fx-background-color: linear-gradient(to right, #00F5D4, #0397AB);
+    -fx-background-radius: 999;
+    -fx-min-height: 6;
+    -fx-pref-height: 6;
+    -fx-max-height: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0,245,212,0.55), 8, 0, 0, 0);
+}
+.bar-fill-info {
+    -fx-background-color: linear-gradient(to right, #00C8E6, #0397AB);
+    -fx-background-radius: 999;
+    -fx-min-height: 6;
+    -fx-pref-height: 6;
+    -fx-max-height: 6;
+}
+.bar-fill-danger {
+    -fx-background-color: linear-gradient(to right, #E94560, #C8232C);
+    -fx-background-radius: 999;
+    -fx-min-height: 6;
+    -fx-pref-height: 6;
+    -fx-max-height: 6;
+}
+
+/* ============================================================
+   PRZYCISKI
+   ============================================================ */
+.btn-primary {
+    -fx-background-color: linear-gradient(to bottom, #C8AA6E, #8E6B2C);
+    -fx-background-radius: 12;
+    -fx-text-fill: #0A1428;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 10 22 10 22;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.40), 12, 0, 0, 2);
+}
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(to bottom, #E0C083, #A07F37);
+}
+
+.btn-ghost {
+    -fx-background-color: transparent;
+    -fx-background-radius: 12;
+    -fx-border-color: -hex-border;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-text;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+}
+.btn-ghost:hover {
+    -fx-border-color: -hex-gold;
+    -fx-text-fill: -hex-gold;
+}
+
+/* ============================================================
+   COMBO BOX (filtr rangi)
+   ============================================================ */
+.combo-box {
+    -fx-background-color: #0A1428;
+    -fx-background-radius: 12;
+    -fx-border-color: -hex-border;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 4 6;
+}
+.combo-box .list-cell {
+    -fx-text-fill: -hex-text;
+    -fx-padding: 6 12;
+    -fx-background-color: transparent;
+}
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+.combo-box .arrow {
+    -fx-background-color: -hex-gold;
+}
+.combo-box-popup .list-view {
+    -fx-background-color: #0A1428;
+    -fx-background-radius: 12;
+    -fx-border-color: -hex-gold;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 4;
+}
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: rgba(200,170,110,0.15);
+}
+
+/* ============================================================
+   TAB PANE (zakładki: Zmiany bohaterów / przedmiotów / run)
+   ============================================================ */
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: transparent;
+}
+.tab-pane > .tab-header-area {
+    -fx-padding: 0;
+}
+.tab-pane .tab {
+    -fx-background-color: transparent;
+    -fx-background-radius: 12 12 0 0;
+    -fx-padding: 10 18 10 18;
+    -fx-background-insets: 0;
+}
+.tab-pane .tab:selected {
+    -fx-background-color: rgba(200,170,110,0.10);
+}
+.tab-pane .tab-label {
+    -fx-text-fill: -hex-text-muted;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: -hex-gold;
+}
+.tab-pane .tab:selected:top {
+    -fx-border-color: transparent transparent -hex-gold transparent;
+    -fx-border-width: 0 0 2 0;
+}
+
+/* ============================================================
+   SCROLL BAR
+   ============================================================ */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+.scroll-bar .thumb {
+    -fx-background-color: rgba(200,170,110,0.3);
+    -fx-background-radius: 999;
+}
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(200,170,110,0.6);
+}
+.scroll-bar .track {
+    -fx-background-color: transparent;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+/* ============================================================
+   TEKSTY POMOCNICZE
+   ============================================================ */
+.text-muted    { -fx-text-fill: -hex-text-muted; }
+.text-gold     { -fx-text-fill: -hex-gold; }
+.text-success  { -fx-text-fill: -hex-success; }
+.text-danger   { -fx-text-fill: -hex-danger; }
+.text-bold     { -fx-font-weight: bold; }
+.text-lg       { -fx-font-size: 16px; }
+.text-sm       { -fx-font-size: 11px; }
+
+/* ============================================================
+   SEPARATORY
+   ============================================================ */
+.divider {
+    -fx-background-color: -hex-border-soft;
+    -fx-min-height: 1;
+    -fx-pref-height: 1;
+    -fx-max-height: 1;
+}
+
+/* ============================================================
+   PROFILE
+   ============================================================ */
+.hero-card {
+    -fx-background-color: linear-gradient(to right, #142944 0%, #0A1428 65%);
+    -fx-background-radius: 20;
+    -fx-border-color: -hex-gold;
+    -fx-border-radius: 20;
+    -fx-border-width: 1;
+    -fx-padding: 28 36 28 36;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.18), 28, 0, 0, 8);
+}
+
+.avatar-circle {
+    -fx-background-color: linear-gradient(to bottom right, #C8AA6E, #0397AB);
+    -fx-background-radius: 999;
+    -fx-border-color: -hex-gold-bright;
+    -fx-border-width: 3;
+    -fx-border-radius: 999;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.45), 20, 0, 0, 0);
+}
+
+.summoner-name {
+    -fx-text-fill: -hex-gold-bright;
+    -fx-font-size: 38px;
+    -fx-font-weight: bold;
+}
+
+.summoner-tag {
+    -fx-text-fill: -hex-gold;
+    -fx-font-size: 18px;
+}
+
+.kpi-card {
+    -fx-background-color: linear-gradient(to bottom, #0F1E33, #0A1428);
+    -fx-background-radius: 16;
+    -fx-border-color: -hex-border;
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+    -fx-padding: 18 22 18 22;
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 4;
+}
+
+.kpi-value {
+    -fx-text-fill: -hex-gold-bright;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+.kpi-value-success { -fx-text-fill: -hex-success; }
+.kpi-value-info    { -fx-text-fill: -hex-turquoise-br; }
+.kpi-value-warn    { -fx-text-fill: -hex-warning; }
+
+.kpi-label {
+    -fx-text-fill: -hex-text-muted;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.rank-card {
+    -fx-background-color: linear-gradient(to bottom right, #1A2A47, #0A1428);
+    -fx-background-radius: 18;
+    -fx-border-color: -hex-gold;
+    -fx-border-radius: 18;
+    -fx-border-width: 1;
+    -fx-padding: 22 24 22 24;
+}
+
+.rank-tier {
+    -fx-text-fill: -hex-gold-bright;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.rank-lp {
+    -fx-text-fill: -hex-turquoise-br;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.rank-queue {
+    -fx-text-fill: -hex-text-muted;
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+}
+
+.match-row {
+    -fx-background-color: #0F1E33;
+    -fx-background-radius: 12;
+    -fx-padding: 12 18 12 18;
+    -fx-border-color: -hex-border-soft;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+.match-row:hover {
+    -fx-background-color: #14253F;
+    -fx-border-color: -hex-gold;
+}
+.match-row-win {
+    -fx-border-color: -hex-success;
+    -fx-effect: innershadow(gaussian, rgba(0,245,212,0.10), 12, 0, 4, 0);
+}
+.match-row-loss {
+    -fx-border-color: -hex-danger;
+    -fx-effect: innershadow(gaussian, rgba(200,35,44,0.10), 12, 0, 4, 0);
+}
+
+.win-chip {
+    -fx-background-color: rgba(0, 245, 212, 0.18);
+    -fx-background-radius: 999;
+    -fx-border-color: -hex-success;
+    -fx-border-radius: 999;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-success;
+    -fx-padding: 4 12 4 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.loss-chip {
+    -fx-background-color: rgba(200, 35, 44, 0.20);
+    -fx-background-radius: 999;
+    -fx-border-color: -hex-danger;
+    -fx-border-radius: 999;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-danger;
+    -fx-padding: 4 12 4 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.section-title {
+    -fx-text-fill: -hex-gold;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* ============================================================
+   CHAMPIONS GRID
+   ============================================================ */
+.champ-card {
+    -fx-background-color: linear-gradient(to bottom, #0F1E33, #0A1428);
+    -fx-background-radius: 14;
+    -fx-border-color: -hex-border;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 12, 0, 0, 4);
+}
+.champ-card:hover {
+    -fx-border-color: -hex-gold;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.40), 18, 0, 0, 6);
+}
+
+.champ-portrait {
+    -fx-background-color: linear-gradient(to bottom right, #1A2E47, #0A1428);
+    -fx-background-radius: 14 14 0 0;
+    -fx-border-color: -hex-border-soft;
+    -fx-border-width: 0 0 1 0;
+}
+
+.champ-portrait-bg-mid    { -fx-background-color: linear-gradient(to bottom right, #2D1B4E, #0A1428); }
+.champ-portrait-bg-top    { -fx-background-color: linear-gradient(to bottom right, #4A1E1E, #0A1428); }
+.champ-portrait-bg-jungle { -fx-background-color: linear-gradient(to bottom right, #1E4A2E, #0A1428); }
+.champ-portrait-bg-adc    { -fx-background-color: linear-gradient(to bottom right, #4E3B1A, #0A1428); }
+.champ-portrait-bg-sup    { -fx-background-color: linear-gradient(to bottom right, #1A3E4E, #0A1428); }
+
+.champ-info {
+    -fx-padding: 10 12 12 12;
+}
+
+.champ-name {
+    -fx-text-fill: -hex-gold-bright;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.champ-letter {
+    -fx-text-fill: rgba(200,170,110,0.65);
+    -fx-font-size: 56px;
+    -fx-font-weight: bold;
+}
+
+.tier-badge {
+    -fx-background-radius: 8;
+    -fx-padding: 3 8 3 8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.tier-sp { -fx-background-color: linear-gradient(to bottom right, #FF006E, #C2185B); -fx-text-fill: white; -fx-effect: dropshadow(gaussian, rgba(255,0,110,0.5), 8, 0, 0, 0); }
+.tier-s  { -fx-background-color: linear-gradient(to bottom right, #F0E6D2, #C8AA6E); -fx-text-fill: #0A1428; }
+.tier-a  { -fx-background-color: linear-gradient(to bottom right, #00C8E6, #0397AB); -fx-text-fill: #0A1428; }
+.tier-b  { -fx-background-color: linear-gradient(to bottom right, #4ADE80, #16A34A); -fx-text-fill: #0A1428; }
+.tier-c  { -fx-background-color: #5B5A4F; -fx-text-fill: white; }
+.tier-d  { -fx-background-color: linear-gradient(to bottom right, #E94560, #C8232C); -fx-text-fill: white; }
+
+.role-chip-mini {
+    -fx-background-color: rgba(10,20,40,0.85);
+    -fx-background-radius: 6;
+    -fx-border-color: rgba(200,170,110,0.4);
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-gold;
+    -fx-padding: 2 7 2 7;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.filter-chip {
+    -fx-background-color: transparent;
+    -fx-background-radius: 999;
+    -fx-border-color: -hex-border;
+    -fx-border-radius: 999;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-text-muted;
+    -fx-padding: 8 18 8 18;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+.filter-chip:hover {
+    -fx-border-color: -hex-gold;
+    -fx-text-fill: -hex-gold;
+}
+.filter-chip.active {
+    -fx-background-color: linear-gradient(to bottom, #C8AA6E, #8E6B2C);
+    -fx-border-color: -hex-gold;
+    -fx-text-fill: #0A1428;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.40), 10, 0, 0, 0);
+}
+
+/* ============================================================
+   MATCH HISTORY (Mecze) — szczegółowe wiersze meczów
+   ============================================================ */
+.match-detail-row {
+    -fx-background-color: linear-gradient(to right, #0F1E33, #0A1428);
+    -fx-background-radius: 14;
+    -fx-padding: 16 22 16 22;
+    -fx-border-color: -hex-border-soft;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+.match-detail-row:hover {
+    -fx-border-color: -hex-gold;
+    -fx-effect: dropshadow(gaussian, rgba(200,170,110,0.20), 14, 0, 0, 4);
+}
+.match-detail-row-win {
+    -fx-border-color: rgba(0,245,212,0.40);
+    -fx-background-color: linear-gradient(to right, #0A2A2A 0%, #0A1428 50%);
+}
+.match-detail-row-win:hover {
+    -fx-border-color: -hex-success;
+}
+.match-detail-row-loss {
+    -fx-border-color: rgba(200,35,44,0.40);
+    -fx-background-color: linear-gradient(to right, #2A0F12 0%, #0A1428 50%);
+}
+.match-detail-row-loss:hover {
+    -fx-border-color: -hex-danger;
+}
+
+.item-slot {
+    -fx-background-color: #050B14;
+    -fx-background-radius: 6;
+    -fx-border-color: -hex-border-soft;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-min-width: 32;
+    -fx-min-height: 32;
+    -fx-max-width: 32;
+    -fx-max-height: 32;
+}
+.item-slot-filled {
+    -fx-background-color: linear-gradient(to bottom right, #1A2E47, #0A1428);
+    -fx-border-color: rgba(200,170,110,0.4);
+}
+.item-slot-trinket {
+    -fx-background-color: linear-gradient(to bottom right, #2A1E47, #0A1428);
+    -fx-border-color: rgba(167,139,250,0.6);
+}
+
+.queue-chip {
+    -fx-background-color: rgba(200,170,110,0.08);
+    -fx-background-radius: 6;
+    -fx-border-color: rgba(200,170,110,0.30);
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-text-fill: -hex-text-muted;
+    -fx-padding: 3 9 3 9;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.team-mini-portrait {
+    -fx-background-color: #14253F;
+    -fx-background-radius: 4;
+    -fx-border-color: -hex-border-soft;
+    -fx-border-radius: 4;
+    -fx-border-width: 1;
+    -fx-min-width: 22;
+    -fx-min-height: 22;
+    -fx-max-width: 22;
+    -fx-max-height: 22;
+}
+.team-mini-portrait-self {
+    -fx-border-color: -hex-gold;
+    -fx-border-width: 2;
+}
+
+/* ============================================================
+   LEADERBOARDS (Rankingi)
+   ============================================================ */
+.rank-row {
+    -fx-background-color: linear-gradient(to right, #0F1E33, #0A1428 70%);
+    -fx-background-radius: 12;
+    -fx-padding: 14 22 14 22;
+    -fx-border-color: -hex-border-soft;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+.rank-row:hover {
+    -fx-background-color: linear-gradient(to right, #14253F, #0A1428 70%);
+    -fx-border-color: -hex-gold;
+}
+
+.rank-position {
+    -fx-background-color: rgba(200,170,110,0.12);
+    -fx-background-radius: 999;
+    -fx-text-fill: -hex-gold;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-alignment: CENTER;
+    -fx-min-width: 48;
+    -fx-min-height: 36;
+    -fx-pref-width: 48;
+    -fx-pref-height: 36;
+}
+.rank-position-gold {
+    -fx-background-color: linear-gradient(to bottom right, #FFD700, #C8AA6E);
+    -fx-text-fill: #0A1428;
+    -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.50), 12, 0, 0, 0);
+}
+.rank-position-silver {
+    -fx-background-color: linear-gradient(to bottom right, #E8E8E8, #9CA3AF);
+    -fx-text-fill: #0A1428;
+    -fx-effect: dropshadow(gaussian, rgba(232,232,232,0.35), 10, 0, 0, 0);
+}
+.rank-position-bronze {
+    -fx-background-color: linear-gradient(to bottom right, #CD7F32, #8B5A2B);
+    -fx-text-fill: #0A1428;
+    -fx-effect: dropshadow(gaussian, rgba(205,127,50,0.35), 10, 0, 0, 0);
+}
+
+.podium-card {
+    -fx-background-color: linear-gradient(to bottom, #14253F, #0A1428);
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-width: 2;
+    -fx-padding: 24 20 24 20;
+    -fx-alignment: CENTER;
+    -fx-spacing: 10;
+}
+.podium-1 {
+    -fx-border-color: #FFD700;
+    -fx-effect: dropshadow(gaussian, rgba(255,215,0,0.45), 28, 0, 0, 10);
+}
+.podium-2 {
+    -fx-border-color: #E8E8E8;
+    -fx-effect: dropshadow(gaussian, rgba(232,232,232,0.30), 22, 0, 0, 8);
+}
+.podium-3 {
+    -fx-border-color: #CD7F32;
+    -fx-effect: dropshadow(gaussian, rgba(205,127,50,0.30), 22, 0, 0, 8);
+}
+
+.podium-avatar {
+    -fx-background-radius: 999;
+    -fx-border-width: 3;
+    -fx-border-radius: 999;
+    -fx-min-width: 96;
+    -fx-min-height: 96;
+    -fx-max-width: 96;
+    -fx-max-height: 96;
+}
+
+.trend-up {
+    -fx-text-fill: -hex-success;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+.trend-down {
+    -fx-text-fill: -hex-danger;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+.trend-flat {
+    -fx-text-fill: -hex-text-muted;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
